@@ -15,8 +15,16 @@ class CheckRole
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() && $request->is('admin/*') && !$request->is('admin/logout') && $request->user()->account_type != 'ADMIN') {
+        /*if ($request->user() && $request->is('admin/*') && !$request->is('admin/logout') && $request->user()->account_type != 'ADMIN') {
+
             return redirect()->route('homepage');
+        }*/
+
+        if ($request->user()) {
+
+            if ($request->is('admin/*') && !$request->is('admin/logout') && $request->user()->account_type != 'ADMIN') {
+                return redirect()->route('home');
+            }
         }
         return $next($request);
     }

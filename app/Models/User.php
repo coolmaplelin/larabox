@@ -3,11 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Backpack\CRUD\CrudTrait;
 
-class User extends Model {
+class User extends Authenticatable {
+//class User extends Model {
 
     use CrudTrait;
+    use Notifiable;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,12 +26,16 @@ class User extends Model {
     protected $fillable = ['first_name', 'last_name', 'email', 'account_type', 'password','phone','photo'];
     public $timestamps = true;
 
+
     /*
     |--------------------------------------------------------------------------
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
-
+    public function getName()
+    {
+        return $this->first_name." ".$this->last_name;
+    }
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -45,6 +53,7 @@ class User extends Model {
     | ACCESORS
     |--------------------------------------------------------------------------
     */
+    
 
     /*
     |--------------------------------------------------------------------------
