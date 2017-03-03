@@ -11,9 +11,10 @@
 |
 */
 
+
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('homepage');
 
 
 // Admin Interface Routes
