@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50711
 File Encoding         : 65001
 
-Date: 2017-03-02 22:19:13
+Date: 2017-03-04 22:21:27
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,13 +24,32 @@ CREATE TABLE `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of migrations
 -- ----------------------------
 INSERT INTO `migrations` VALUES ('1', '2014_10_12_000000_create_users_table', '1');
 INSERT INTO `migrations` VALUES ('2', '2014_10_12_100000_create_password_resets_table', '1');
+INSERT INTO `migrations` VALUES ('3', '2017_03_04_195240_create_newsletters_table', '2');
+INSERT INTO `migrations` VALUES ('7', '2017_03_04_214550_create_user_newsletters_table', '3');
+
+-- ----------------------------
+-- Table structure for newsletters
+-- ----------------------------
+DROP TABLE IF EXISTS `newsletters`;
+CREATE TABLE `newsletters` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of newsletters
+-- ----------------------------
+INSERT INTO `newsletters` VALUES ('1', 'Daily');
+INSERT INTO `newsletters` VALUES ('2', 'Weekly');
+INSERT INTO `newsletters` VALUES ('3', 'Monthly');
 
 -- ----------------------------
 -- Table structure for password_resets
@@ -47,6 +66,7 @@ CREATE TABLE `password_resets` (
 -- ----------------------------
 -- Records of password_resets
 -- ----------------------------
+INSERT INTO `password_resets` VALUES ('ericli@example.com', '$2y$10$UGVwMMKURzbs25nPax2vwuMWtchkgTlh5TZA3pva5oQo9eApjzvDG', '2017-03-04 12:09:49');
 
 -- ----------------------------
 -- Table structure for users
@@ -66,10 +86,31 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', 'Maple', 'Test', 'maple_lin2004@hotmail.com', 'ADMIN', '$2y$10$6/HsxfE3JQQsl38PrNjZsOc29sNiEEpNBACLdAYy6O3uyodaECvZG', 'N1fgdrECBaTC5fOMercgWZJHNlSIoZXxlunlifDum2ykdYhiIxifhjCqUCiS', null, 'assets/Images/photo/c153c69557d97b91b573c3e90a9d9ecd.jpg', '2016-11-02 10:36:05', '2017-03-01 22:33:58');
+INSERT INTO `users` VALUES ('1', 'Maple', 'Test', 'maple_lin2004@hotmail.com', 'ADMIN', '$2y$10$6/HsxfE3JQQsl38PrNjZsOc29sNiEEpNBACLdAYy6O3uyodaECvZG', 'PW1DAAWP2T9ODz6XGSIVUol4HsvYbhoABPYlXYrr9SzR3rVyHy539ON1AsIG', null, 'assets/Images/photo/c153c69557d97b91b573c3e90a9d9ecd.jpg', '2016-11-02 10:36:05', '2017-03-01 22:33:58');
+INSERT INTO `users` VALUES ('2', 'Bin', 'Li', 'binli@example.com', 'USER', '$2y$10$8yprn8Cr58YWeRuJgmpeLO20GkVsXXxpKIq893WisneCVkYSusEjK', 'UkFKCDunHpsHQkyVkq6wIq94muQfIZ1THeFZSVHeNF4TxEUtDgho4bZrKNMu', null, 'assets/Images/photo/d3b883458853fb8fc0267106bd8d1a2d.jpg', '2017-03-03 20:29:03', '2017-03-03 21:33:46');
+INSERT INTO `users` VALUES ('3', 'Eric', 'Li', 'ericli@example.com', 'USER', '$2y$10$eiq40ApwhC3dwKV/lRhJWOCw8lA.cwZP7lj57KFBN8XUNhwZoyh7S', 'ySNRucAXroUMdiYCtopIsbc19njIBkxVTcl4VT2pN6uuCW0QV7iumcGK27E2', null, null, '2017-03-04 11:50:30', '2017-03-04 11:50:30');
+
+-- ----------------------------
+-- Table structure for user_newsletters
+-- ----------------------------
+DROP TABLE IF EXISTS `user_newsletters`;
+CREATE TABLE `user_newsletters` (
+  `user_id` int(10) unsigned NOT NULL,
+  `newsletter_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`user_id`,`newsletter_id`),
+  KEY `user_newsletters_newsletter_id_foreign` (`newsletter_id`),
+  CONSTRAINT `user_newsletters_newsletter_id_foreign` FOREIGN KEY (`newsletter_id`) REFERENCES `newsletters` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `user_newsletters_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of user_newsletters
+-- ----------------------------
+INSERT INTO `user_newsletters` VALUES ('1', '1');
+INSERT INTO `user_newsletters` VALUES ('1', '2');
 SET FOREIGN_KEY_CHECKS=1;

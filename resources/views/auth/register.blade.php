@@ -75,6 +75,27 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="newsletters" class="col-md-4 control-label">Newsletters</label>
+                            <div class="col-md-6">
+                                
+                                @foreach ($newsletters as $newsletter)
+
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" name="newsletter[]" value="{{ $newsletter->id }}" @php  print old('newsletter') && in_array($newsletter->id, old('newsletter'))  ? 'checked' :'' ; @endphp /> {{ $newsletter->name }} </label>
+                                    </div>
+
+                                @endforeach
+
+                                @if ($errors->has('newsletter'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('newsletter') }}</strong>
+                                    </span>
+                                @endif
+                            
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
                                     Register
