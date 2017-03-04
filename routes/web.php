@@ -26,6 +26,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function()
   // [...] other routes
 });
 
+// Laravel build in Auth module
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
