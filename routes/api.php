@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('pages.json', 'API\PageController@gettree');
+
+// Route::group(['prefix' => 'api', 'middleware' => 'auth'], function () {
+//     Route::get('pages', 'API\PageController@gettree');
+// });

@@ -30,6 +30,11 @@
     <!-- BackPack Base CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/backpack/backpack.base.css') }}">
 
+    <!-- Bootstrap Toggle -->
+    <link rel="stylesheet" href="{{ asset('js/bootstrap-toggle/bootstrap-toggle.min.css') }}">
+    <!-- Bootstrap Tree -->
+    <link rel="stylesheet" href="{{ asset('js/bootstrap-treeview/bootstrap-treeview.css') }}">
+
     @yield('after_styles')
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -134,6 +139,13 @@
 
     @include('backpack::inc.alerts')
 
+    <!-- Bootstrap Toggle -->
+    <script src="{{ asset('js/bootstrap-toggle/bootstrap-toggle.min.js') }}"></script>
+    <!-- Bootstrap Tree -->
+    <script src="{{ asset('js/bootstrap-treeview/bootstrap-treeview.js') }}"></script>
+
+
+    <script src="{{ asset('js/admin-form-helpers.js') }}"></script>
     @yield('after_scripts')
 
     <!-- JavaScripts -->

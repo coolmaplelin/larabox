@@ -115,9 +115,14 @@ class RegisterController extends Controller
         //Insert newsletter records
         foreach($request->get('newsletter') as $newsletter_id) {
 
-            DB::table('user_newsletters')->insert(
-                ['user_id' => $user->id, 'newsletter_id' => $newsletter_id]
-            );
+            // DB::table('user_newsletters')->insert(
+            //     ['user_id' => $user->id, 'newsletter_id' => $newsletter_id]
+            // );
+
+            UserNewsletters::create([
+                'user_id' => $user->id,
+                'newsletter_id' => $newsletter_id,
+            ]);
         }
     }
 }

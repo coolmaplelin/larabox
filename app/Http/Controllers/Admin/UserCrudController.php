@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 // VALIDATION: change the requests to match your own file names if you need form validation
-use App\Http\Requests\UserStoreCrudRequest as StoreRequest;
-use App\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
+use App\Http\Requests\Admin\UserStoreCrudRequest as StoreRequest;
+use App\Http\Requests\Admin\UserUpdateCrudRequest as UpdateRequest;
 
 class UserCrudController extends CrudController {
 

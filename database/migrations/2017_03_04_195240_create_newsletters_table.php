@@ -17,7 +17,7 @@ class CreateNewslettersTable extends Migration
             $table->increments('id');
             $table->string('name');
 
-            //$table->engine = 'InnoDB';
+            $table->engine = 'InnoDB';
         });
     }
 

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50711
 File Encoding         : 65001
 
-Date: 2017-03-04 22:21:27
+Date: 2017-03-05 22:26:15
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,7 +24,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of migrations
@@ -33,6 +33,7 @@ INSERT INTO `migrations` VALUES ('1', '2014_10_12_000000_create_users_table', '1
 INSERT INTO `migrations` VALUES ('2', '2014_10_12_100000_create_password_resets_table', '1');
 INSERT INTO `migrations` VALUES ('3', '2017_03_04_195240_create_newsletters_table', '2');
 INSERT INTO `migrations` VALUES ('7', '2017_03_04_214550_create_user_newsletters_table', '3');
+INSERT INTO `migrations` VALUES ('8', '2017_03_05_154133_create_pages_table', '4');
 
 -- ----------------------------
 -- Table structure for newsletters
@@ -50,6 +51,38 @@ CREATE TABLE `newsletters` (
 INSERT INTO `newsletters` VALUES ('1', 'Daily');
 INSERT INTO `newsletters` VALUES ('2', 'Weekly');
 INSERT INTO `newsletters` VALUES ('3', 'Monthly');
+
+-- ----------------------------
+-- Table structure for pages
+-- ----------------------------
+DROP TABLE IF EXISTS `pages`;
+CREATE TABLE `pages` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_live` tinyint(1) NOT NULL DEFAULT '0',
+  `published_at` datetime DEFAULT NULL,
+  `parent_id` int(10) unsigned DEFAULT NULL,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci,
+  `gallery` json DEFAULT NULL,
+  `meta_title` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pages_parent_id_foreign` (`parent_id`),
+  CONSTRAINT `pages_parent_id_foreign` FOREIGN KEY (`parent_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ----------------------------
+-- Records of pages
+-- ----------------------------
+INSERT INTO `pages` VALUES ('4', 'home', '1', '2017-03-05 17:49:45', null, 'homepage', 'homepage', null, null, null, null, '2017-03-05 17:49:45', '2017-03-05 17:51:11', null);
+INSERT INTO `pages` VALUES ('5', 'About Us', '1', '2017-03-05 20:16:22', '4', 'About Us', 'about-us', null, null, null, null, '2017-03-05 20:16:22', '2017-03-05 20:16:22', null);
+INSERT INTO `pages` VALUES ('6', 'About Maple', '1', '2017-03-05 21:28:49', '5', 'About Maple', 'about-maple', null, null, null, null, '2017-03-05 21:28:49', '2017-03-05 22:22:02', null);
+INSERT INTO `pages` VALUES ('8', 'About Bin', '0', '2017-03-05 22:05:29', '5', 'About Bin', 'about-bin', null, null, null, null, '2017-03-05 22:05:29', '2017-03-05 22:21:48', null);
 
 -- ----------------------------
 -- Table structure for password_resets
@@ -86,12 +119,12 @@ CREATE TABLE `users` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES ('1', 'Maple', 'Test', 'maple_lin2004@hotmail.com', 'ADMIN', '$2y$10$6/HsxfE3JQQsl38PrNjZsOc29sNiEEpNBACLdAYy6O3uyodaECvZG', 'PW1DAAWP2T9ODz6XGSIVUol4HsvYbhoABPYlXYrr9SzR3rVyHy539ON1AsIG', null, 'assets/Images/photo/c153c69557d97b91b573c3e90a9d9ecd.jpg', '2016-11-02 10:36:05', '2017-03-01 22:33:58');
+INSERT INTO `users` VALUES ('1', 'Maple', 'Test', 'maple_lin2004@hotmail.com', 'ADMIN', '$2y$10$6TmOjF2FD.CDe.r4tpe/QOcKVBMeIHLLk1Y7Ql6DdUiytUmfypJsa', 'ZgdYokyS7UWQXbLaCi6V89HFtKJGNNVQO1r7CdJwzTFMbwmYm3AT0lBdrORl', null, 'assets/Images/photo/c153c69557d97b91b573c3e90a9d9ecd.jpg', '2016-11-02 10:36:05', '2017-03-05 16:19:39');
 INSERT INTO `users` VALUES ('2', 'Bin', 'Li', 'binli@example.com', 'USER', '$2y$10$8yprn8Cr58YWeRuJgmpeLO20GkVsXXxpKIq893WisneCVkYSusEjK', 'UkFKCDunHpsHQkyVkq6wIq94muQfIZ1THeFZSVHeNF4TxEUtDgho4bZrKNMu', null, 'assets/Images/photo/d3b883458853fb8fc0267106bd8d1a2d.jpg', '2017-03-03 20:29:03', '2017-03-03 21:33:46');
 INSERT INTO `users` VALUES ('3', 'Eric', 'Li', 'ericli@example.com', 'USER', '$2y$10$eiq40ApwhC3dwKV/lRhJWOCw8lA.cwZP7lj57KFBN8XUNhwZoyh7S', 'ySNRucAXroUMdiYCtopIsbc19njIBkxVTcl4VT2pN6uuCW0QV7iumcGK27E2', null, null, '2017-03-04 11:50:30', '2017-03-04 11:50:30');
 
