@@ -44,6 +44,24 @@ class Page extends Model
         return '/page/'.$this->slug;
     }
 
+    public function getParentArray()
+    {
+        $rtnArray = [];
+        if ($this->parent_id) {
+            $Parent = Page::find($this->parent_id);
+            if ($Parent) {
+
+                $grandParents = $Parent->getParentArray();
+                if (count($grandParents) > 0) {
+                    $rtnArray = $grandParents;
+                }
+                $rtnArray[] = $Parent;
+            }
+        }
+
+        return $rtnArray;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -105,23 +123,34 @@ class Page extends Model
     }
 
 
- //    public static function boot()
-	// {
-	//     parent::boot();
+    public static function boot()
+	{
+	    parent::boot();
 
-	//     // registering a callback to be executed upon the creation of an activity
-	//     static::created(function($page) {
+        static::updated(function($page) {
 
- //            $page->slug = str_slug($page->title, "-");
- //            $page->save();
-	//     });
+            //var_dump($page->getDirty());die();
+            $changed = $page->getDirty();
+            if (array_key_exists('parent_id', $changed) || array_key_exists('title', $changed)) {
+                //Re generate slug for children
+                $children = $page->children;
+                if (count($children) > 0) {
+                    foreach($children as $child) {
 
- //        static::updated(function($page) {
+                        $parents = $child->getParentArray();
+                        $slug = "";
+                        foreach($parents as $pa)
+                        {
+                            $slug .= str_slug($pa->title, "-")."/";
+                        }
+                        $slug .= str_slug($child->title, "-");
+                        $child->slug = $slug;
+                        $child->save();
+                    }
+                }
 
- //            $page->slug = str_slug($page->title, "-");
+            }
+        });
 
- //            //$page->save();
- //        });
-
-	// }
+	}
 }
