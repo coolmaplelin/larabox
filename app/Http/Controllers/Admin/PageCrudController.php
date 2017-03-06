@@ -55,6 +55,9 @@ class PageCrudController extends CrudController {
                 'name'  => 'parent_id',
                 'label' => 'Parent',
                 'type'  => 'parent_selector',
+                'wrapperAttributes' => [
+                    'class' => 'form-group col-md-12 has-clear',
+                ],
                 'tab' => 'Page Detail',
                 'hint' => 'Expand blow page tree to select a parent page',
                 'data_source' => '/api/pages.json'
@@ -134,7 +137,7 @@ class PageCrudController extends CrudController {
 		//return parent::storeCrud();
 	}
 
-	public function update(StoreRequest $request)
+	public function update(UpdateRequest $request)
 	{
 		//encrypt password and set it to request
         $this->crud->hasAccessOrFail('update');

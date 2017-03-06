@@ -15,6 +15,7 @@
     @yield('before_styles')
 
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
     <!-- Bootstrap 3.3.5 -->
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/') }}/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -29,11 +30,6 @@
 
     <!-- BackPack Base CSS -->
     <link rel="stylesheet" href="{{ asset('vendor/backpack/backpack.base.css') }}">
-
-    <!-- Bootstrap Toggle -->
-    <link rel="stylesheet" href="{{ asset('js/bootstrap-toggle/bootstrap-toggle.min.css') }}">
-    <!-- Bootstrap Tree -->
-    <link rel="stylesheet" href="{{ asset('js/bootstrap-treeview/bootstrap-treeview.css') }}">
 
     @yield('after_styles')
 
@@ -139,13 +135,7 @@
 
     @include('backpack::inc.alerts')
 
-    <!-- Bootstrap Toggle -->
-    <script src="{{ asset('js/bootstrap-toggle/bootstrap-toggle.min.js') }}"></script>
-    <!-- Bootstrap Tree -->
-    <script src="{{ asset('js/bootstrap-treeview/bootstrap-treeview.js') }}"></script>
 
-
-    <script src="{{ asset('js/admin-form-helpers.js') }}"></script>
     @yield('after_scripts')
 
     <!-- JavaScripts -->
