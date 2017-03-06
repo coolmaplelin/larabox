@@ -1,5 +1,4 @@
 <!-- checkbox toggle field -->
-
 <div @include('crud::inc.field_wrapper_attributes') >
     @include('crud::inc.field_translatable_icon')
     <div class="checkbox">
