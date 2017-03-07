@@ -17,9 +17,9 @@ Route::get('/', function () {
 })->name('homepage');
 
 Route::get('/upload', 'FileUploadController@index');
-Route::get('/upload/image', 'FileUploadController@uploadimage');
-Route::post('/upload/image', 'FileUploadController@uploadimage');
-Route::delete('/upload/image', 'FileUploadController@uploadimage');
+Route::get('/fileupload/handle/{objtype}/{objid}', 'FileUploadController@handle');
+Route::post('/fileupload/handle/{objtype}/{objid}', 'FileUploadController@handle');
+Route::delete('/fileupload/handle/{objtype}/{objid}', 'FileUploadController@handle');
 
 
 // Admin Interface Routes

@@ -1,7 +1,7 @@
 @extends('backpack::layout')
 
 @section('content')
-    @include('inc.jquery_file_upload', ['objtype' => 'Page', 'objid' => 4])
+    @include('inc.jquery_file_upload')
 @endsection
  
 
@@ -46,5 +46,45 @@
     <!-- The File Upload user interface plugin -->
     <script src="/js/jQuery-File-Upload/js/jquery.fileupload-ui.js"></script>
     <!-- The main application script -->
-    <script src="/js/fileupload.js"></script>   
+    <script type="text/JavaScript">
+        
+        $(function () {
+            'use strict';
+
+            // Initialize the jQuery File Upload widget:
+            $('#fileupload').fileupload({
+                // Uncomment the following to send cross-domain cookies:
+                //xhrFields: {withCredentials: true},
+                url: '/fileupload/handle/{{ $objtype }}/{{ $objid }}'
+            });
+
+            // Enable iframe cross-domain access via redirect option:
+            $('#fileupload').fileupload(
+                'option',
+                'redirect',
+                window.location.href.replace(
+                    /\/[^\/]*$/,
+                    '/cors/result.html?%s'
+                )
+            );
+
+
+            // Load existing files:
+            $('#fileupload').addClass('fileupload-processing');
+            $.ajax({
+                // Uncomment the following to send cross-domain cookies:
+                //xhrFields: {withCredentials: true},
+                url: $('#fileupload').fileupload('option', 'url'),
+                dataType: 'json',
+                context: $('#fileupload')[0]
+            }).always(function () {
+                $(this).removeClass('fileupload-processing');
+            }).done(function (result) {
+                $(this).fileupload('option', 'done')
+                    .call(this, $.Event('done'), {result: result});
+            });
+
+        });
+
+    </script>   
 @endsection 

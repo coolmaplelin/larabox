@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Helpers\UploadHandler;
+use App\Models\Page;
 
 class FileUploadController extends Controller
 {
@@ -17,16 +18,56 @@ class FileUploadController extends Controller
      */
     public function index()
     {
-        return view('upload');
+        $objtype = 'page';
+        $objid = '4';
+        return view('upload', ['objtype' => $objtype, 'objid' => $objid]);
     }
 
-    public function uploadimage(Request $request)
+    public function handle(Request $request, $objtype, $objid)
     {
-        //var_dump($request->file('files'));
 
-        $UploadHandler = new UploadHandler();
+        if ($request->isMethod('post') || $request->isMethod('delete')) {
+            $Page = Page::find($objid);
+            $galleryJson = $Page->gallery;
+            $galleryArray = $galleryJson ? json_decode($galleryJson, true) : array();
+        }
+
+        $storagePath  = \Storage::disk('assets')->getDriver()->getAdapter()->getPathPrefix();
+        $options = [
+            'script_url' => $request->path(),
+            'upload_dir' => $storagePath."files/".$objtype."/".$objid."/",
+            'upload_url' => 'http://'.$_SERVER['HTTP_HOST'].'/assets/files/'.$objtype."/".$objid."/",
+            'print_response' => false,
+        ];
+
+        $UploadHandler = new UploadHandler($options);
         $response = $UploadHandler->get_response();
-        //var_dump($response);die();
-        //return response()->json($response);
+        
+        if ($request->isMethod('post') ){
+            if (isset($response['files'][0])) {
+                $galleryArray[] = $response['files'][0];
+
+                $Page->gallery = json_encode($galleryArray);
+                $Page->save();
+            }
+            
+        }
+
+        if ($request->isMethod('delete')) {
+            $file = $request->get('file');
+            if (isset($response[$file]) && $response[$file]) {
+                foreach($galleryArray as $key => $item) {
+                    if ($item['name'] == $file) {
+                        unset($galleryArray[$key]);
+                    }
+                }
+                $galleryArray = array_values($galleryArray);
+                $Page->gallery = json_encode($galleryArray);
+                $Page->save();
+            }
+        }
+
+//        var_dump($response);
+        return response()->json($response);
     }
 }

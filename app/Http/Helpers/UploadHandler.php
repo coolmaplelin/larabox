@@ -45,22 +45,10 @@ class UploadHandler
 
     public function __construct($options = null, $initialize = true, $error_messages = null) {
         $this->response = array();
-
-        // Original url
-        // script_url: http://larabox/js/jQuery-File-Upload/server/php/index.php
-        // upload_dir: C:/wamp/www/larabox/public/js/jQuery-File-Upload/server/php/files/
-        // upload_url: http://larabox/js/jQuery-File-Upload/server/php/files/
-
         $this->options = array(
-            // 'script_url' => $this->get_full_url().'/'.$this->basename($this->get_server_var('SCRIPT_NAME')),
-            // 'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/files/',
-            // 'upload_url' => $this->get_full_url().'/files/',
-            // 'script_url' => 'http://larabox/upload/image'
-            // 'upload_dir' => 'C:/wamp/www/larabox/storage/files'
-            // 'upload_url' => 'http://larabox/upload/image'
-             'script_url' => 'http://larabox/upload/image',
-             'upload_dir' => 'C:/wamp/www/larabox/public/js/jQuery-File-Upload/server/php/files/',
-             'upload_url' => 'http://larabox/public/js/jQuery-File-Upload/server/php/files/',
+            'script_url' => $this->get_full_url().'/'.$this->basename($this->get_server_var('SCRIPT_NAME')),
+            'upload_dir' => dirname($this->get_server_var('SCRIPT_FILENAME')).'/files/',
+            'upload_url' => $this->get_full_url().'/files/',
             'input_stream' => 'php://input',
             'user_dirs' => false,
             'mkdir_mode' => 0755,
@@ -212,6 +200,7 @@ class UploadHandler
         $https = !empty($_SERVER['HTTPS']) && strcasecmp($_SERVER['HTTPS'], 'on') === 0 ||
             !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
                 strcasecmp($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') === 0;
+
         return
             ($https ? 'https://' : 'http://').
             (!empty($_SERVER['REMOTE_USER']) ? $_SERVER['REMOTE_USER'].'@' : '').
