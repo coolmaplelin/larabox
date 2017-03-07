@@ -16,6 +16,11 @@ Route::get('/', function () {
     return view('welcome');
 })->name('homepage');
 
+Route::get('/upload', 'FileUploadController@index');
+Route::get('/upload/image', 'FileUploadController@uploadimage');
+Route::post('/upload/image', 'FileUploadController@uploadimage');
+Route::delete('/upload/image', 'FileUploadController@uploadimage');
+
 
 // Admin Interface Routes
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function()
