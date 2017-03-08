@@ -2,6 +2,8 @@
 
 @section('content')
     @include('inc.jquery_file_upload')
+
+
 @endsection
  
 
@@ -27,7 +29,7 @@
     <!-- The Canvas to Blob plugin is included for image resizing functionality -->
     <script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
     <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
     <!-- blueimp Gallery script -->
     <script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
     <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
@@ -89,6 +91,12 @@
                     enableSorting();
                 }
 
+                $(".template-download .btn.edit").click(function(){
+
+                    $("#editModal .filename").val($(this).data('filename'));
+                    $("#editModal").modal("show");
+                })
+
             });
 
             //Binding callback
@@ -101,40 +109,70 @@
             });
 
             $("#fileupload .saveorder").click(function(){
-                var files = [];
+                var fileorders = [];
 
                 $("#fileupload .files tr").each(function(){
-                    files.push($(this).find('.name').find('a').attr('title'));
+                    fileorders.push($(this).find('.name').find('a').attr('title'));
                 });
 
-                console.log(files);
+                //console.log(fileorders);
 
                 $.ajax({
                     url: '/fileupload/saveorder/{{ $objtype }}/{{ $objid }}',
                     type: 'post',
                     data: {
-                        files: files,
+                        fileorders: fileorders,
                     },
                     dataType: 'JSON',
                     success: function (result) {
-                        
+                        if (result.success) {
+                            alert("Order is saved");
+                        }
                     },
                     error: function () {
                         alert('Failed.');
                     }
                 }); 
             });
+
+
+
+            $("#editModal .modal-footer .btn-success").click(function(){
+                console.log($("#editModal .modal-body form").serializeArray()); 
+                
+                $.ajax({
+                    url: '/fileupload/saveextra/{{ $objtype }}/{{ $objid }}',
+                    type: 'post',
+                    data: {
+                        extra: $("#editModal .modal-body form").serializeArray(),
+                    },
+                    dataType: 'JSON',
+                    success: function (result) {
+                        if (result.success) {
+                            alert("Data is saved");
+                        }
+                    },
+                    error: function () {
+                        alert('Failed.');
+                    }
+                }); 
+            })
         });
 
         function enableSorting()
         {
-            $("#fileupload .sortable").sortable();
+            $("#fileupload .sortable").sortable({
+                items: "tr:not(.template-upload)",
+                placeholder: "ui-state-highlight",
+                // stop: function(event, ui){
+                    
+                // }
+            });
             $("#fileupload .saveorder").removeClass('hidden');
         }
 
         function disableSorting()
         {
-            $("#fileupload .sortable").sortable( "disable" );
             $("#fileupload .saveorder").addClass('hidden');
         }
 

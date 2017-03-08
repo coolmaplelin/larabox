@@ -57,6 +57,44 @@
         <a class="play-pause"></a>
         <ol class="indicator"></ol>
     </div>
+    <!-- Modal -->
+    <div id="editModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Preference</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input type="hidden" class="form-control filename" name="filename"/>
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control title" name="title"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea class="form-control desc" name="desc"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Live</label>
+                                <select class="form-control live" name="live">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+            </div>
+
+        </div>
+    </div>
+
     <!-- The template to display files available for upload -->
     <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -116,6 +154,11 @@
                 <span class="size">{%=o.formatFileSize(file.size)%}</span>
             </td>
             <td>
+                <button type="button" class="btn btn-primary edit" data-filename="{%=file.name%}">
+                    <i class="glyphicon glyphicon-edit"></i>
+                    <span>Edit</span>
+                </button>
+
                 {% if (file.deleteUrl) { %}
                     <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                         <i class="glyphicon glyphicon-trash"></i>
