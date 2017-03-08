@@ -17,9 +17,12 @@ Route::get('/', function () {
 })->name('homepage');
 
 Route::get('/upload', 'FileUploadController@index');
-Route::get('/fileupload/handle/{objtype}/{objid}', 'FileUploadController@handle');
-Route::post('/fileupload/handle/{objtype}/{objid}', 'FileUploadController@handle');
-Route::delete('/fileupload/handle/{objtype}/{objid}', 'FileUploadController@handle');
+Route::group(['prefix' => 'fileupload'], function()
+{
+	Route::match(['get', 'post', 'delete'], 'handle/{objtype}/{objid}', 'FileUploadController@handle');
+	Route::post('saveorder/{objtype}/{objid}', 'FileUploadController@saveorder');
+});
+
 
 
 // Admin Interface Routes

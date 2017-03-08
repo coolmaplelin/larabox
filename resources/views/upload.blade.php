@@ -18,7 +18,8 @@
 
 @section('after_scripts')
     <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-    <script src="/js/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+    <!--<script src="/js/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!-- The Templates plugin is included to render the upload/download listings -->
     <script src="//blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
     <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
@@ -79,12 +80,63 @@
                 context: $('#fileupload')[0]
             }).always(function () {
                 $(this).removeClass('fileupload-processing');
+
             }).done(function (result) {
                 $(this).fileupload('option', 'done')
                     .call(this, $.Event('done'), {result: result});
+              
+                if ($("#fileupload .sortable").find('tr').size() > 0) {
+                    enableSorting();
+                }
+
             });
 
+            //Binding callback
+            $("#fileupload").bind('fileuploadchange', function(){
+                disableSorting();
+            });
+
+            $("#fileupload").bind('fileuploaddone', function(){
+                enableSorting();
+            });
+
+            $("#fileupload .saveorder").click(function(){
+                var files = [];
+
+                $("#fileupload .files tr").each(function(){
+                    files.push($(this).find('.name').find('a').attr('title'));
+                });
+
+                console.log(files);
+
+                $.ajax({
+                    url: '/fileupload/saveorder/{{ $objtype }}/{{ $objid }}',
+                    type: 'post',
+                    data: {
+                        files: files,
+                    },
+                    dataType: 'JSON',
+                    success: function (result) {
+                        
+                    },
+                    error: function () {
+                        alert('Failed.');
+                    }
+                }); 
+            });
         });
+
+        function enableSorting()
+        {
+            $("#fileupload .sortable").sortable();
+            $("#fileupload .saveorder").removeClass('hidden');
+        }
+
+        function disableSorting()
+        {
+            $("#fileupload .sortable").sortable( "disable" );
+            $("#fileupload .saveorder").addClass('hidden');
+        }
 
     </script>   
 @endsection 
