@@ -91,12 +91,6 @@
                     enableSorting();
                 }
 
-                $(".template-download .btn.edit").click(function(){
-
-                    $("#editModal .filename").val($(this).data('filename'));
-                    $("#editModal").modal("show");
-                })
-
             });
 
             //Binding callback
@@ -109,53 +103,12 @@
             });
 
             $("#fileupload .saveorder").click(function(){
-                var fileorders = [];
-
-                $("#fileupload .files tr").each(function(){
-                    fileorders.push($(this).find('.name').find('a').attr('title'));
-                });
-
-                //console.log(fileorders);
-
-                $.ajax({
-                    url: '/fileupload/saveorder/{{ $objtype }}/{{ $objid }}',
-                    type: 'post',
-                    data: {
-                        fileorders: fileorders,
-                    },
-                    dataType: 'JSON',
-                    success: function (result) {
-                        if (result.success) {
-                            alert("Order is saved");
-                        }
-                    },
-                    error: function () {
-                        alert('Failed.');
-                    }
-                }); 
+                saveorder();
             });
 
 
-
-            $("#editModal .modal-footer .btn-success").click(function(){
-                console.log($("#editModal .modal-body form").serializeArray()); 
-                
-                $.ajax({
-                    url: '/fileupload/saveextra/{{ $objtype }}/{{ $objid }}',
-                    type: 'post',
-                    data: {
-                        extra: $("#editModal .modal-body form").serializeArray(),
-                    },
-                    dataType: 'JSON',
-                    success: function (result) {
-                        if (result.success) {
-                            alert("Data is saved");
-                        }
-                    },
-                    error: function () {
-                        alert('Failed.');
-                    }
-                }); 
+            $("#editorModal .modal-footer .btn-success").click(function(){
+                saveextras();
             })
         });
 
@@ -176,5 +129,78 @@
             $("#fileupload .saveorder").addClass('hidden');
         }
 
+        function saveorder()
+        {
+            var fileorders = [];
+
+            $("#fileupload .files tr").each(function(){
+                fileorders.push($(this).find('.name').find('a').attr('title'));
+            });
+
+            //console.log(fileorders);
+            $.ajax({
+                url: '/fileupload/saveorder/{{ $objtype }}/{{ $objid }}',
+                type: 'post',
+                data: {
+                    fileorders: fileorders,
+                },
+                dataType: 'JSON',
+                success: function (result) {
+                    if (result.success) {
+                        alert("Order is saved");
+                    }
+                },
+                error: function () {
+                    alert('Failed.');
+                }
+            }); 
+
+        }
+
+        function saveextras()
+        {
+            var formData = $("#editorModal .modal-body form").serializeArray();
+            var filename = formData[0]['value'];
+            //console.log(formData);
+            var tdExtra = $("button[data-filename='" + filename + "']").parent().siblings('td.extra');
+            //console.log(tdExtra);
+
+            for(var i = 1; i < formData.length; i++) {
+                tdExtra.find('.' + formData[i]['name']).text(formData[i]['value']);
+            }
+            
+            $.ajax({
+                url: '/fileupload/saveextras/{{ $objtype }}/{{ $objid }}',
+                type: 'post',
+                data: {
+                    extras: $("#editorModal .modal-body form").serializeArray(),
+                },
+                dataType: 'JSON',
+                success: function (result) {
+                    if (result.success) {
+                        alert("Data is saved");
+                    }else{
+                        alert(result.error);
+                    }
+                },
+                error: function () {
+                    alert('Failed.');
+                }
+            }); 
+
+        }
+
+        function editExtras(button)
+        {
+            $("#editorModal .filename").val(button.data('filename'));
+            var tdExtra = button.parent().siblings('td.extra');
+            
+            $("#editorModal .title").val(tdExtra.find('.title').text());
+            $("#editorModal .desc").val(tdExtra.find('.desc').text());
+            $("#editorModal .live").val(tdExtra.find('.live').text());
+            //$("#editorModal .title").val($(this).parent().siblings('.extra').find('.title').text());
+            $("#editorModal").modal("show");
+
+        }
     </script>   
 @endsection 

@@ -58,7 +58,7 @@
         <ol class="indicator"></ol>
     </div>
     <!-- Modal -->
-    <div id="editModal" class="modal fade" role="dialog">
+    <div id="editorModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -154,7 +154,7 @@
                 <span class="size">{%=o.formatFileSize(file.size)%}</span>
             </td>
             <td>
-                <button type="button" class="btn btn-primary edit" data-filename="{%=file.name%}">
+                <button type="button" class="btn btn-primary edit" data-filename="{%=file.name%}" onClick="editExtras($(this)); return false;">
                     <i class="glyphicon glyphicon-edit"></i>
                     <span>Edit</span>
                 </button>
@@ -172,6 +172,12 @@
                     </button>
                 {% } %}
             </td>
+            <td class="extra hidden">
+                <span class="title">{%=file.title%}</span>
+                <span class="desc">{%=file.desc%}</span>
+                <span class="live">{%=file.live%}</span>
+            </td>
+
         </tr>
     {% } %}
     </script>

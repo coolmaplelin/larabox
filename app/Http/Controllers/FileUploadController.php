@@ -31,7 +31,9 @@ class FileUploadController extends Controller
         $galleryArray = $galleryJson ? json_decode($galleryJson, true) : array();
 
         if($request->isMethod('get')) {
+
             $response = ['files' => $galleryArray];
+
         }else{
 
             $storagePath  = \Storage::disk('assets')->getDriver()->getAdapter()->getPathPrefix();
@@ -46,8 +48,17 @@ class FileUploadController extends Controller
             $response = $UploadHandler->get_response();
 
             if ($request->isMethod('post') ){
-                if (isset($response['files'][0])) {
-                    $galleryArray[] = $response['files'][0];
+                if (isset($response['files'])) {
+
+                    foreach($response['files'] as $file) {
+                        $rsfile = $file;
+
+                        //extra fields
+                        $rsfile->title = '';
+                        $rsfile->desc = '';
+                        $rsfile->live = '1';
+                        $galleryArray[] = $rsfile;    
+                    }
 
                     $Page->gallery = json_encode($galleryArray);
                     $Page->save();
@@ -95,6 +106,46 @@ class FileUploadController extends Controller
         $Page->save();
 
         $response = ['success' => true];
+
+        return response()->json($response);
+    }
+
+    public function saveextras(Request $request, $objtype, $objid)
+    {
+        $response = ['success' => false];
+
+        $Page = Page::find($objid);
+        $galleryJson = $Page->gallery;
+        $galleryArray = $galleryJson ? json_decode($galleryJson, true) : array();
+
+        $newGalleryArray = [];
+        $extras = $request->get('extras');
+        $filename = isset($extras[0]['name']) && $extras[0]['name'] == 'filename' ? $extras[0]['value'] : '';
+        foreach($galleryArray as $key => $item) {
+            if ($item['name'] == $filename) {
+                $theKey = $key;
+                break;
+            }
+        }
+
+        //If found
+        if ($filename && isset($theKey) ) {
+
+            for($i = 1; $i < count($extras); $i++) {
+                if (isset($galleryArray[$key][$extras[$i]['name']])) {
+                    $galleryArray[$key][$extras[$i]['name']] = $extras[$i]['value'];
+                }
+            }
+
+            $Page->gallery = json_encode($galleryArray);
+            $Page->save();
+            $response = ['success' => true];
+
+        }else{
+
+            $response['error'] = "File not found";
+
+        }
 
         return response()->json($response);
     }

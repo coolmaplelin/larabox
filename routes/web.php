@@ -21,6 +21,7 @@ Route::group(['prefix' => 'fileupload'], function()
 {
 	Route::match(['get', 'post', 'delete'], 'handle/{objtype}/{objid}', 'FileUploadController@handle');
 	Route::post('saveorder/{objtype}/{objid}', 'FileUploadController@saveorder');
+	Route::post('saveextras/{objtype}/{objid}', 'FileUploadController@saveextras');
 });
 
 
