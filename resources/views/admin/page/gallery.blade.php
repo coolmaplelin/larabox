@@ -13,3 +13,27 @@
 	  </ol>
 	</section>
 @endsection
+
+
+@section('content')
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+
+			<!-- Default box -->
+			@if ($crud->hasAccess('list'))
+				<a href="{{ url($crud->route) }}"><i class="fa fa-angle-double-left"></i> {{ trans('backpack::crud.back_to_all') }} <span class="text-lowercase">{{ $crud->entity_name_plural }}</span></a><br><br>
+			@endif
+
+			<div class="box">
+		    	<div class="box-header with-border">
+		    		<h3 class="box-title">{{ trans($entry->title) }}</h3>
+		    	</div>
+
+		    	<div class="box-body">
+		    		@include('inc.jquery_file_upload', ['entity_name' => $crud->entity_name, 'entity_id' => $id])	
+				</div>
+		    </div>
+
+		</div>
+	</div>
+@endsection

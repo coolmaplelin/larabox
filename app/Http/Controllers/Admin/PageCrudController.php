@@ -30,7 +30,13 @@ class PageCrudController extends CrudController {
                 'type' => 'boolean',
             ],
     	]);
-        
+
+        $this->crud->removeButtonFromStack('update', 'line');
+        $this->crud->removeButtonFromStack('delete', 'line');
+        $this->crud->addButton('line', 'update', 'view', 'crud::buttons.update', 'end');
+        $this->crud->addButton('line', 'gallery', 'view', 'crud::buttons.fileupload', 'end');
+        $this->crud->addButton('line', 'delete', 'view', 'crud::buttons.delete', 'end');
+        //$this->crud->setButtonsOrder('line', ['edit', 'gallery', 'delete']);
 
         $this->crud->addFields([
 			[
@@ -134,9 +140,6 @@ class PageCrudController extends CrudController {
 
         $this->data['id'] = $id;
 
-        $this->data['objtype'] = 'page';
-        $this->data['objid'] = $id;
-
         return view('admin.page.edit', $this->data);
         //return view($this->crud->getEditView(), $this->data);
     }
@@ -185,7 +188,7 @@ class PageCrudController extends CrudController {
 
     public function gallery($id)
     {
-        //$this->crud->hasAccessOrFail('gallery');
+        $this->crud->hasAccessOrFail('update');
 
         // get the info for that entry
         $this->data['entry'] = $this->crud->getEntry($id);

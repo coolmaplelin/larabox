@@ -19,13 +19,13 @@ class FileUploadController extends Controller
     public function index()
     {
  
-        return view('upload', ['objtype' => 'page', 'objid' => 4]);
+        return view('upload', ['entity_name' => 'page', 'entity_id' => 4]);
     }
 
-    public function handle(Request $request, $objtype, $objid)
+    public function handle(Request $request, $entity_name, $entity_id)
     {
 
-        $Page = Page::find($objid);
+        $Page = Page::find($entity_id);
         $galleryJson = $Page->gallery;
         $galleryArray = $galleryJson ? json_decode($galleryJson, true) : array();
 
@@ -38,8 +38,8 @@ class FileUploadController extends Controller
             $storagePath  = \Storage::disk('assets')->getDriver()->getAdapter()->getPathPrefix();
             $options = [
                 'script_url' => '/fileupload/handle',
-                'upload_dir' => $storagePath."files/".$objtype."/".$objid."/",
-                'upload_url' => 'http://'.$_SERVER['HTTP_HOST'].'/assets/files/'.$objtype."/".$objid."/",
+                'upload_dir' => $storagePath."files/".$entity_name."/".$entity_id."/",
+                'upload_url' => 'http://'.$_SERVER['HTTP_HOST'].'/assets/files/'.$entity_name."/".$entity_id."/",
                 'print_response' => false,
             ];
 
@@ -84,10 +84,10 @@ class FileUploadController extends Controller
         return response()->json($response);
     }
 
-    public function saveorder(Request $request, $objtype, $objid)
+    public function saveorder(Request $request, $entity_name, $entity_id)
     {
         $response = ['success' => false];
-        $Page = Page::find($objid);
+        $Page = Page::find($entity_id);
         $galleryJson = $Page->gallery;
         $galleryArray = $galleryJson ? json_decode($galleryJson, true) : array();
 
@@ -109,11 +109,11 @@ class FileUploadController extends Controller
         return response()->json($response);
     }
 
-    public function saveextras(Request $request, $objtype, $objid)
+    public function saveextras(Request $request, $entity_name, $entity_id)
     {
         $response = ['success' => false];
 
-        $Page = Page::find($objid);
+        $Page = Page::find($entity_id);
         $galleryJson = $Page->gallery;
         $galleryArray = $galleryJson ? json_decode($galleryJson, true) : array();
 
