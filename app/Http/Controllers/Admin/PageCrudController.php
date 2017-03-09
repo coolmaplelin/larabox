@@ -134,7 +134,11 @@ class PageCrudController extends CrudController {
 
         $this->data['id'] = $id;
 
+        $this->data['objtype'] = 'page';
+        $this->data['objid'] = $id;
+
         return view('admin.page.edit', $this->data);
+        //return view($this->crud->getEditView(), $this->data);
     }
 
 	public function store(StoreRequest $request)
@@ -178,4 +182,24 @@ class PageCrudController extends CrudController {
         
 		//return parent::updateCrud();
 	}
+
+    public function gallery($id)
+    {
+        //$this->crud->hasAccessOrFail('gallery');
+
+        // get the info for that entry
+        $this->data['entry'] = $this->crud->getEntry($id);
+        $this->data['crud'] = $this->crud;
+        $this->data['saveAction'] = $this->getSaveAction();
+        $this->data['fields'] = $this->crud->getUpdateFields($id);
+        $this->data['title'] = trans('backpack::crud.edit').' '.$this->crud->entity_name;
+
+        $this->data['id'] = $id;
+
+        $this->data['objtype'] = 'page';
+        $this->data['objid'] = $id;
+
+        return view('admin.page.gallery', $this->data);
+        //return view($this->crud->getEditView(), $this->data);
+    }
 }

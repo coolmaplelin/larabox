@@ -1,10 +1,13 @@
 <!-- checkbox toggle field -->
+<?php $objtype = 'page'; ?>
+<?php $objid = 4; ?>
+
 <div @include('crud::inc.field_wrapper_attributes') >
     @include('crud::inc.field_translatable_icon')
 
     <div class="container">
         <!-- The file upload form used as target for the file upload widget -->
-        <form id="fileupload" action="//jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data">
+        <form id="fileupload" method="POST" enctype="multipart/form-data">
             <!-- Redirect browsers with JavaScript disabled to the origin page -->
             <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
             <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
@@ -29,6 +32,10 @@
                         <span>Delete</span>
                     </button>
                     <input type="checkbox" class="toggle">
+                    <button type="button" class="btn btn-success saveorder hidden">
+                        <i class="glyphicon glyphicon-th-list"></i>
+                        <span>Save Order</span>
+                    </button>
                     <!-- The global file processing state -->
                     <span class="fileupload-process"></span>
                 </div>
@@ -43,24 +50,9 @@
                 </div>
             </div>
             <!-- The table listing the files available for upload/download -->
-            <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+            <table role="presentation" class="table table-striped"><tbody class="files sortable"></tbody></table>
         </form>
-        <br>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Demo Notes</h3>
-            </div>
-            <div class="panel-body">
-                <ul>
-                    <li>The maximum file size for uploads in this demo is <strong>999 KB</strong> (default file size is unlimited).</li>
-                    <li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this demo (by default there is no file type restriction).</li>
-                    <li>Uploaded files will be deleted automatically after <strong>5 minutes or less</strong> (demo files are stored in memory).</li>
-                    <li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage (see <a href="https://github.com/blueimp/jQuery-File-Upload/wiki/Browser-support">Browser support</a>).</li>
-                    <li>Please refer to the <a href="https://github.com/blueimp/jQuery-File-Upload">project website</a> and <a href="https://github.com/blueimp/jQuery-File-Upload/wiki">documentation</a> for more information.</li>
-                    <li>Built with the <a href="http://getbootstrap.com/">Bootstrap</a> CSS framework and Icons from <a href="http://glyphicons.com/">Glyphicons</a>.</li>
-                </ul>
-            </div>
-        </div>
+        
     </div>
     <!-- The blueimp Gallery widget -->
     <div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
@@ -72,6 +64,44 @@
         <a class="play-pause"></a>
         <ol class="indicator"></ol>
     </div>
+    <!-- Modal -->
+    <div id="editorModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Preference</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input type="hidden" class="form-control filename" name="filename"/>
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control title" name="title"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea class="form-control desc" name="desc"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Live</label>
+                                <select class="form-control live" name="live">
+                                    <option value="1">Yes</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success">Save</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+            </div>
+
+        </div>
+    </div>
+
     <!-- The template to display files available for upload -->
     <script id="template-upload" type="text/x-tmpl">
     {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -131,6 +161,11 @@
                 <span class="size">{%=o.formatFileSize(file.size)%}</span>
             </td>
             <td>
+                <button type="button" class="btn btn-primary edit" data-filename="{%=file.name%}" onClick="editExtras($(this)); return false;">
+                    <i class="glyphicon glyphicon-edit"></i>
+                    <span>Edit</span>
+                </button>
+
                 {% if (file.deleteUrl) { %}
                     <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                         <i class="glyphicon glyphicon-trash"></i>
@@ -144,6 +179,12 @@
                     </button>
                 {% } %}
             </td>
+            <td class="extra hidden">
+                <span class="title">{%=file.title%}</span>
+                <span class="desc">{%=file.desc%}</span>
+                <span class="live">{%=file.live%}</span>
+            </td>
+
         </tr>
     {% } %}
     </script>
@@ -173,7 +214,8 @@
     @push('crud_fields_scripts')
         {{-- YOUR JS HERE --}}
         <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-        <script src="/js/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+        <!--<script src="/js/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>-->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
         <!-- The Templates plugin is included to render the upload/download listings -->
         <script src="//blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
         <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
@@ -181,7 +223,7 @@
         <!-- The Canvas to Blob plugin is included for image resizing functionality -->
         <script src="//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
         <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
         <!-- blueimp Gallery script -->
         <script src="//blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
         <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
@@ -201,7 +243,161 @@
         <!-- The File Upload user interface plugin -->
         <script src="/js/jQuery-File-Upload/js/jquery.fileupload-ui.js"></script>
         <!-- The main application script -->
-        <script src="/js/jQuery-File-Upload/js/main.js"></script>    
+        <script type="text/JavaScript">
+            
+            $(function () {
+                'use strict';
+
+                // Initialize the jQuery File Upload widget:
+                $('#fileupload').fileupload({
+                    // Uncomment the following to send cross-domain cookies:
+                    //xhrFields: {withCredentials: true},
+                    url: '/fileupload/handle/{{ $objtype }}/{{ $objid }}'
+                });
+
+                // Enable iframe cross-domain access via redirect option:
+                $('#fileupload').fileupload(
+                    'option',
+                    'redirect',
+                    window.location.href.replace(
+                        /\/[^\/]*$/,
+                        '/cors/result.html?%s'
+                    )
+                );
+
+
+                // Load existing files:
+                $('#fileupload').addClass('fileupload-processing');
+                $.ajax({
+                    // Uncomment the following to send cross-domain cookies:
+                    //xhrFields: {withCredentials: true},
+                    url: $('#fileupload').fileupload('option', 'url'),
+                    dataType: 'json',
+                    context: $('#fileupload')[0]
+                }).always(function () {
+                    $(this).removeClass('fileupload-processing');
+
+                }).done(function (result) {
+                    $(this).fileupload('option', 'done')
+                        .call(this, $.Event('done'), {result: result});
+                  
+                    if ($("#fileupload .sortable").find('tr').size() > 0) {
+                        enableSorting();
+                    }
+
+                });
+
+                //Binding callback
+                $("#fileupload").bind('fileuploadchange', function(){
+                    disableSorting();
+                });
+
+                $("#fileupload").bind('fileuploaddone', function(){
+                    enableSorting();
+                });
+
+                $("#fileupload .saveorder").click(function(){
+                    saveorder();
+                });
+
+
+                $("#editorModal .modal-footer .btn-success").click(function(){
+                    saveextras();
+                })
+            });
+
+            function enableSorting()
+            {
+                $("#fileupload .sortable").sortable({
+                    items: "tr:not(.template-upload)",
+                    placeholder: "ui-state-highlight",
+                    // stop: function(event, ui){
+                        
+                    // }
+                });
+                $("#fileupload .saveorder").removeClass('hidden');
+            }
+
+            function disableSorting()
+            {
+                $("#fileupload .saveorder").addClass('hidden');
+            }
+
+            function saveorder()
+            {
+                var fileorders = [];
+
+                $("#fileupload .files tr").each(function(){
+                    fileorders.push($(this).find('.name').find('a').attr('title'));
+                });
+
+                //console.log(fileorders);
+                $.ajax({
+                    url: '/fileupload/saveorder/{{ $objtype }}/{{ $objid }}',
+                    type: 'post',
+                    data: {
+                        fileorders: fileorders,
+                    },
+                    dataType: 'JSON',
+                    success: function (result) {
+                        if (result.success) {
+                            alert("Order is saved");
+                        }
+                    },
+                    error: function () {
+                        alert('Failed.');
+                    }
+                }); 
+
+            }
+
+            function saveextras()
+            {
+                var formData = $("#editorModal .modal-body form").serializeArray();
+                var filename = formData[0]['value'];
+                //console.log(formData);
+                var tdExtra = $("button[data-filename='" + filename + "']").parent().siblings('td.extra');
+                //console.log(tdExtra);
+
+                for(var i = 1; i < formData.length; i++) {
+                    tdExtra.find('.' + formData[i]['name']).text(formData[i]['value']);
+                }
+                
+                $.ajax({
+                    url: '/fileupload/saveextras/{{ $objtype }}/{{ $objid }}',
+                    type: 'post',
+                    data: {
+                        extras: $("#editorModal .modal-body form").serializeArray(),
+                    },
+                    dataType: 'JSON',
+                    success: function (result) {
+                        if (result.success) {
+                            alert("Data is saved");
+                            $("#editorModal").modal('toggle');
+                        }else{
+                            alert(result.error);
+                        }
+                    },
+                    error: function () {
+                        alert('Failed.');
+                    }
+                }); 
+
+            }
+
+            function editExtras(button)
+            {
+                $("#editorModal .filename").val(button.data('filename'));
+                var tdExtra = button.parent().siblings('td.extra');
+                
+                $("#editorModal .title").val(tdExtra.find('.title').text());
+                $("#editorModal .desc").val(tdExtra.find('.desc').text());
+                $("#editorModal .live").val(tdExtra.find('.live').text());
+                //$("#editorModal .title").val($(this).parent().siblings('.extra').find('.title').text());
+                $("#editorModal").modal("show");
+
+            }
+        </script>   
     @endpush
 @endif
 {{-- End of Extra CSS and JS --}}

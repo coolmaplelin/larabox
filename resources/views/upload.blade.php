@@ -179,6 +179,7 @@
                 success: function (result) {
                     if (result.success) {
                         alert("Data is saved");
+                        $("#editorModal").modal('toggle');
                     }else{
                         alert(result.error);
                     }

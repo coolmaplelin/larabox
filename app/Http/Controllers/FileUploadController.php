@@ -18,9 +18,8 @@ class FileUploadController extends Controller
      */
     public function index()
     {
-        $objtype = 'page';
-        $objid = '4';
-        return view('upload', ['objtype' => $objtype, 'objid' => $objid]);
+ 
+        return view('upload', ['objtype' => 'page', 'objid' => 4]);
     }
 
     public function handle(Request $request, $objtype, $objid)
@@ -38,7 +37,7 @@ class FileUploadController extends Controller
 
             $storagePath  = \Storage::disk('assets')->getDriver()->getAdapter()->getPathPrefix();
             $options = [
-                'script_url' => $request->path(),
+                'script_url' => '/fileupload/handle',
                 'upload_dir' => $storagePath."files/".$objtype."/".$objid."/",
                 'upload_url' => 'http://'.$_SERVER['HTTP_HOST'].'/assets/files/'.$objtype."/".$objid."/",
                 'print_response' => false,
@@ -132,9 +131,7 @@ class FileUploadController extends Controller
         if ($filename && isset($theKey) ) {
 
             for($i = 1; $i < count($extras); $i++) {
-                if (isset($galleryArray[$key][$extras[$i]['name']])) {
-                    $galleryArray[$key][$extras[$i]['name']] = $extras[$i]['value'];
-                }
+                $galleryArray[$key][$extras[$i]['name']] = $extras[$i]['value'];
             }
 
             $Page->gallery = json_encode($galleryArray);

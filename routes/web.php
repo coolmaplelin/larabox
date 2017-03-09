@@ -17,6 +17,7 @@ Route::get('/', function () {
 })->name('homepage');
 
 Route::get('/upload', 'FileUploadController@index');
+
 Route::group(['prefix' => 'fileupload'], function()
 {
 	Route::match(['get', 'post', 'delete'], 'handle/{objtype}/{objid}', 'FileUploadController@handle');
@@ -32,6 +33,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function()
   // Backpack\CRUD: Define the resources for the entities you want to CRUD.
     CRUD::resource('user', 'Admin\UserCrudController');
     CRUD::resource('page', 'Admin\PageCrudController');
+
+    Route::get('page/{id}/gallery', 'Admin\PageCrudController@gallery');
   
   // [...] other routes
 });
