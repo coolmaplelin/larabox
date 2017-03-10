@@ -185,8 +185,7 @@ return [
         Backpack\CRUD\CrudServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Barryvdh\Elfinder\ElfinderServiceProvider::class,
-
-        /* Put this Original Service Prodivders after Backpack to override Backpack routes */
+        Backpack\Settings\SettingsServiceProvider::class,
 
     ],
 

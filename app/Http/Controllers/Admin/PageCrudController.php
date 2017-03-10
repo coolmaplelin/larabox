@@ -15,6 +15,17 @@ class PageCrudController extends CrudController {
         $this->crud->setRoute("admin/page");
         $this->crud->setEntityNameStrings('page', 'pages');
 
+        $this->crud->addFilter([ // dropdown filter
+            'name' => 'is_live',
+            'type' => 'dropdown',
+            'label'=> 'Live'
+        ], [
+          0 => 'No',
+          1 => 'Yes',
+        ], function($value) { // if the filter is live
+            $this->crud->addClause('where', 'is_live', $value);
+        });
+
         $this->crud->setColumns([
         	[
 	            'name' => 'name',
