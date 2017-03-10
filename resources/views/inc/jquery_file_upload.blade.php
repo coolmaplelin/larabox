@@ -354,14 +354,29 @@
                 dataType: 'JSON',
                 success: function (result) {
                     if (result.success) {
-                        alert("Data is saved");
-                        $("#editorModal").modal('toggle');
+                        //alert("Data is saved");
+                        $("#editorModal .modal-body").prepend('<div class="alert alert-success"><b>Success!</b> Data is saved</div>');
                     }else{
-                        alert(result.error);
+                        //alert(result.error);
+                        $("#editorModal .modal-body").prepend('<div class="alert alert-danger"><b>Failed!</b>' + result.error + '</div>');
+                    }
+
+                    if ($("#editorModal .modal-body .alert").length > 0) {
+                        setTimeout(function() {
+                            $("#editorModal .modal-body .alert").remove();
+
+                            if (result.success) {
+                                $("#editorModal").modal('toggle');    
+                            }
+                            
+                        }, 1000);
                     }
                 },
                 error: function () {
-                    alert('Failed.');
+                    $("#editorModal .modal-body").prepend('<div class="alert alert-danger"><b>Failed!</b></div>');
+                    setTimeout(function() {
+                        $("#editorModal .modal-body .alert").remove();
+                    }, 1000);
                 }
             }); 
 

@@ -199,8 +199,6 @@ class PageCrudController extends CrudController {
 
         $this->data['id'] = $id;
 
-        $this->data['objtype'] = 'page';
-        $this->data['objid'] = $id;
 
         return view('admin.page.gallery', $this->data);
         //return view($this->crud->getEditView(), $this->data);

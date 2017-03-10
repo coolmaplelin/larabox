@@ -37,7 +37,7 @@ class FileUploadController extends Controller
 
             $storagePath  = \Storage::disk('assets')->getDriver()->getAdapter()->getPathPrefix();
             $options = [
-                'script_url' => '/fileupload/handle',
+                'script_url' => '/fileupload/handle/'.$entity_name.'/'.$entity_id.'/',
                 'upload_dir' => $storagePath."files/".$entity_name."/".$entity_id."/",
                 'upload_url' => 'http://'.$_SERVER['HTTP_HOST'].'/assets/files/'.$entity_name."/".$entity_id."/",
                 'print_response' => false,
