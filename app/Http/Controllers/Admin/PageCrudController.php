@@ -120,29 +120,6 @@ class PageCrudController extends CrudController {
 		]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     *
-     * @return Response
-     */
-    public function edit($id)
-    {
-        $this->crud->hasAccessOrFail('update');
-
-        // get the info for that entry
-        $this->data['entry'] = $this->crud->getEntry($id);
-        $this->data['crud'] = $this->crud;
-        $this->data['saveAction'] = $this->getSaveAction();
-        $this->data['fields'] = $this->crud->getUpdateFields($id);
-        $this->data['title'] = trans('backpack::crud.edit').' '.$this->crud->entity_name;
-
-        $this->data['id'] = $id;
-
-        return view('admin.page.edit', $this->data);
-        //return view($this->crud->getEditView(), $this->data);
-    }
 
 	public function store(StoreRequest $request)
 	{
