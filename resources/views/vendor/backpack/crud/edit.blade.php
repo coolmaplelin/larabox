@@ -43,9 +43,11 @@
 					<h3 class="box-title">{{ trans('backpack::crud.edit') }}</h3>
 				@endif
 
-				<div class="pull-right"><a href="{{ URL::to('/').$entry->getFullUrl() }}" target="_blank">{{ URL::to('/').$entry->getFullUrl() }}</a></div>
+				@if (method_exists($entry, 'getFullUrl'))
+					<div class="pull-right"><a href="{{ URL::to('/').$entry->getFullUrl() }}" target="_blank">{{ URL::to('/').$entry->getFullUrl() }}</a></div>
+				@endif
 		    </div>
-		    
+
 		    <div class="box-body row">
 		      <!-- load the view from the application if it exists, otherwise load the one in the package -->
 		      @if(view()->exists('vendor.backpack.crud.form_content'))
