@@ -15,6 +15,13 @@ class UserCrudController extends CrudController {
         $this->crud->setRoute("admin/user");
         $this->crud->setEntityNameStrings('user', 'users');
 
+        $this->crud->addFilter([ // dropdown filter
+            'name' => 'account_type',
+            'type' => 'dropdown',
+            'label'=> 'Account Type'
+        ], config('constants.users_account_type'), function($value) { 
+            $this->crud->addClause('where', 'account_type', $value);
+        });
 
         //$this->crud->setColumns(['first_name', 'last_name', 'email']);
         $this->crud->setColumns([
@@ -28,8 +35,17 @@ class UserCrudController extends CrudController {
             ],
             [
 	            'name' => 'email',
-	            'label' => 'email',
+	            'label' => 'Email',
             ],
+            [ // n-n relationship (with pivot table)
+                'name'      => 'newsletters',
+                'label'     => 'Newsletters',
+                'type'      => 'select_multiple',
+                'entity'    => 'newsletters',
+                'attribute' => 'name',
+                'model'     => "App\Models\Newsletter",
+                'pivot'     => true,
+            ]
     	]);
         
 
@@ -49,6 +65,16 @@ class UserCrudController extends CrudController {
 	        [
                 'name'  => 'email',
                 'type'  => 'email',
+                'tab' => 'User Detail'
+            ],
+            [
+                'name'      => 'newsletters',
+                'label'     => 'Newsletters',
+                'type'      => 'checklist',
+                'entity'    => 'newsletters',
+                'attribute' => 'name',
+                'model'     => "App\Models\Newsletter",
+                'pivot'     => true,
                 'tab' => 'User Detail'
             ],
             [ 
