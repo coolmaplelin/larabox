@@ -1,0 +1,37 @@
+.clearfix {
+  display: inline-block; }
+  .clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0; }
+
+.nav-scrollable {
+  background: url("../images/app-bg.png") repeat scroll 0 0 #ffffff;
+  border: 1px solid #cccccc;
+  min-height: 220px;
+  padding: 5px; }
+
+#nav-container {
+  padding-left: 0; }
+  #nav-container li, #nav-container li ul {
+    list-style-type: none; }
+  #nav-container .nav-item {
+    float: left;
+    border: 2px solid #ccc;
+    list-style-type: none;
+    margin: 3px;
+    min-height: 190px;
+    min-width: 200px;
+    padding: 5px; }
+  #nav-container .controls {
+    float: right; }
+  #nav-container .active {
+    background-color: #FFFFFF; }
+  #nav-container .inactive {
+    background-color: #CCCCCC;
+    border: 2px solid #999; }
+
+/*# sourceMappingURL=admin.css.map */

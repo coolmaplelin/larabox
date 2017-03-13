@@ -1,0 +1,39 @@
+.clearfix { 
+	display: inline-block; 
+	&:after{
+		visibility: hidden;
+  		display: block;
+  		font-size: 0;
+  		content: " ";
+  		clear: both;
+  		height: 0;
+	}
+}
+
+.nav-scrollable {
+    background: url("../images/app-bg.png") repeat scroll 0 0 #ffffff;
+    border: 1px solid #cccccc;
+    min-height: 220px;
+    padding: 5px;
+}
+
+#nav-container{
+	padding-left: 0;
+	li, li ul {list-style-type: none;}
+
+	.nav-item {
+		float: left; 
+		border: 2px solid #ccc;
+		list-style-type: none;
+		margin: 3px;
+		min-height: 190px;
+		min-width: 200px;
+		padding: 5px;
+	}
+
+	.controls{float: right;}
+
+	.active{background-color: #FFFFFF;}
+	.inactive{background-color: #CCCCCC;border: 2px solid #999;}
+}
+
