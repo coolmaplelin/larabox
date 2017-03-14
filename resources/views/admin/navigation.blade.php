@@ -62,27 +62,99 @@
             
             @foreach ($parentNavElements as $parentNavElement)
 
-			    addAnother("#nav-container", "{{ $parentNavElement->name }}", "{{ $parentNavElement->page_id }}", "{{ $parentNavElement->link }}", "{{ $parentNavElement->active }}", "{{ $parentNavElement->id }}");
+			    addParent("#nav-container", "{{ $parentNavElement->name }}", "{{ $parentNavElement->page_id }}", "{{ $parentNavElement->link }}", "{{ $parentNavElement->active }}", "{{ $parentNavElement->id }}");
                   
 				@foreach ($childNavElements[$parentNavElement->id] as $childNavElement)
-					addAnotherSub("#nav-"+ totalNav , "{{ $childNavElement->name }}", "{{ $childNavElement->page_id }}", "{{ $childNavElement->link }}", "{{ $childNavElement->active }}");
+					addChild("#nav-"+ totalNav , "{{ $childNavElement->name }}", "{{ $childNavElement->page_id }}", "{{ $childNavElement->link }}", "{{ $childNavElement->active }}");
 				@endforeach
                   
 			@endforeach
 
         });
 
-        function addAnother(id, name, page_id, link, active, origID)
+        function addParent(id, name, page_id, link, active, origID)
         {
             totalNav++;
-            var newLine = '<li class="nav-item ' + (active == 1 ? 'active' :'inactive') + '" id="nav-' + totalNav + '">';
+            var fullID = 'nav-' + totalNav;
+
+            var newLine = '<li id="' + fullID + '" class="nav-item ' + (active == 1 ? 'active' :'inactive') + '" data-id="' + fullID + '">';
             
-            var buttons = '<button type="button" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>';
+            var buttons = ' <button type="button" class="btn btn-default btn-add btn-xs">' 
+                          + '	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>'
+                          + '</button>'
+                          + '<button type="button" class="btn btn-default btn-edit btn-xs">'
+                          + '	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>'
+                          + '</button>'
+                          + '<button type="button" class="btn btn-default btn-delete btn-xs">'
+                          + '	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>'
+                          + '</button>';
 
             newLine += '<div class="controls">' + buttons + '</div>';
             newLine += '<div class="heading">' + name + '</div>';
+            newLine += '<div class="data hidden">'
+            			+	'<span class="page_id">' + page_id + '</span>'
+            			+	'<span class="link">' + link + '</span>'
+            			+	'<span class="active">' + active + '</span>'
+            			+'</div>';
+            newLine += '<ul class="nav-inner"></ul>';
             newLine += '</li>';
             $(id).append(newLine);
+
+            $('#' + fullID + ' .btn-add').click(function(){
+            	resetSubNavigation(fullID); 
+            	openSubNavEditor(); 
+            	return false;
+            });
+
+            $('#' + fullID + ' .btn-edit').click(function(){
+            	prepareNavEditor(fullID); 
+            	openNavEditor(); 
+            	return false;
+            });
+
+            $('#' + fullID + ' .btn-delete').click(function(){
+            	deleteNav(fullID); 
+            	return false;
+            });
+        }
+
+        function addChild(parent, name, page_id, link, active)
+        {
+            var subNavTotal = $(parent + " .sub-nav-item").size();
+            subNavTotal++;
+            var parentIDArray = parent.split("#");
+            var parentID = parentIDArray[1];
+            var fullID = parentID + '-sub-nav-' + subNavTotal;
+
+            var newLine = '<li id="' + fullID + '" class="sub-nav-item ' + (active == 1 ? 'active' :'inactive') + '">';
+
+            var buttons = '<button type="button" class="btn btn-default btn-edit btn-xs">'
+                          + '	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>'
+                          + '</button>'
+                          + '<button type="button" class="btn btn-default btn-delete btn-xs">'
+                          + '	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>'
+                          + '</button>';
+            newLine += '<div class="controls">' + buttons + '</div>';  
+            newLine += '<div class="heading">' + name + '</div>';  
+            newLine += '<div class="data hidden">'
+            			+	'<span class="page_id">' + page_id + '</span>'
+            			+	'<span class="link">' + link + '</span>'
+            			+	'<span class="active">' + active + '</span>'
+            			+'</div>';          
+            newLine += '</li>';
+
+            $(parent + " ul").append(newLine);
+
+            $('#' + fullID + ' .btn-edit').click(function(){
+            	prepareSubnavEditor(fullID); 
+            	openSubNavEditor(); 
+            	return false;
+            });
+
+            $('#' + fullID + ' .btn-delete').click(function(){
+            	deleteNav(fullID); 
+            	return false;
+            });
         }
             
 	</script>

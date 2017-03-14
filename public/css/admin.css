@@ -24,14 +24,33 @@
     list-style-type: none;
     margin: 3px;
     min-height: 190px;
-    min-width: 200px;
+    min-width: 220px;
     padding: 5px; }
+    #nav-container .nav-item.active {
+      background-color: #FFFFFF; }
+    #nav-container .nav-item.inactive {
+      background-color: #CCCCCC;
+      border: 2px solid #999; }
+  #nav-container .heading {
+    float: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 140px; }
   #nav-container .controls {
     float: right; }
-  #nav-container .active {
-    background-color: #FFFFFF; }
-  #nav-container .inactive {
-    background-color: #CCCCCC;
-    border: 2px solid #999; }
+  #nav-container .nav-inner {
+    padding-left: 0;
+    width: 100%; }
+    #nav-container .nav-inner .sub-nav-item {
+      float: left;
+      width: 215px; }
+      #nav-container .nav-inner .sub-nav-item.active {
+        background-color: #FFFFFF; }
+      #nav-container .nav-inner .sub-nav-item.inactive {
+        background-color: #CCCCCC;
+        border: 2px solid #999; }
+    #nav-container .nav-inner .heading {
+      padding-left: 10px; }
 
 /*# sourceMappingURL=admin.css.map */
