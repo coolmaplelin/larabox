@@ -27,8 +27,11 @@
 				                <option value='FOOTER' @if ($nav_type == 'FOOTER') selected @endif >Footer Links</option>
 				            </select>  
 						</label>
-                        <a href="#" class="btn btn-primary ladda-button" onClick="resetNavEditor(); openNavEditor(); return false">
+                        <a href="#" class="btn btn-primary ladda-button" onClick="openNavEditor(); return false">
                         	<span class="ladda-label"><i class="fa fa-plus"></i> Add menu item</span>
+                        </a>
+                        <a href="#" class="btn btn-success ladda-button" onClick="saveNavigation();return false">
+                            <span class="ladda-label"><i class="fa fa-save"></i> Save all</span>
                         </a>
 					</div>
 		    	</div>
@@ -36,14 +39,62 @@
 		    	<div class="box-body">
 		    		<div class="nav-scrollable">
                         <ul id="nav-container" class="clearfix"></ul>
-                        
-                        
                     </div>
 				</div>
 		    </div>
 
 		</div>
 	</div>
+
+    <!-- Modal -->
+    <div id="navEditor" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Item</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <input type="hidden" class="form-control nav_id" name="nav_id"/>
+                        <input type="hidden" class="form-control parent_id" name="parent_id"/>
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control name" name="name"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Page</label>
+                            <select class="form-control page_id" name="page_id">
+                                <option value=""></option>
+                                @foreach ($pages as $page)
+                                    <option value="{{ $page->id }} ">{{ $page->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Link</label>
+                            <input type="text" class="form-control link" name="link"/>
+                            <p class="help-block">Leave this if page is specified.</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Active</label>
+                            <select class="form-control active" name="active">
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success btn-save">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 @endsection
 
 
@@ -65,14 +116,19 @@
 			    addParent("#nav-container", "{{ $parentNavElement->name }}", "{{ $parentNavElement->page_id }}", "{{ $parentNavElement->link }}", "{{ $parentNavElement->active }}", "{{ $parentNavElement->id }}");
                   
 				@foreach ($childNavElements[$parentNavElement->id] as $childNavElement)
-					addChild("#nav-"+ totalNav , "{{ $childNavElement->name }}", "{{ $childNavElement->page_id }}", "{{ $childNavElement->link }}", "{{ $childNavElement->active }}");
+					addChild("#nav-"+ totalNav , "{{ $childNavElement->name }}", "{{ $childNavElement->page_id }}", "{{ $childNavElement->link }}", "{{ $childNavElement->active }}", "{{ $childNavElement->id }}");
 				@endforeach
                   
 			@endforeach
 
+            $("#navEditor .btn-save").click(function(){
+                updateNavigationContainer();
+                $("#navEditor").modal('toggle');
+            })
+
         });
 
-        function addParent(id, name, page_id, link, active, origID)
+        function addParent(id, name, page_id, link, active, origID = '')
         {
             totalNav++;
             var fullID = 'nav-' + totalNav;
@@ -95,21 +151,20 @@
             			+	'<span class="page_id">' + page_id + '</span>'
             			+	'<span class="link">' + link + '</span>'
             			+	'<span class="active">' + active + '</span>'
+                        +   '<span class="origid">' + origID + '</span>'
             			+'</div>';
             newLine += '<ul class="nav-inner"></ul>';
             newLine += '</li>';
             $(id).append(newLine);
 
             $('#' + fullID + ' .btn-add').click(function(){
-            	resetSubNavigation(fullID); 
-            	openSubNavEditor(); 
+                openNavEditor('', fullID);
             	return false;
             });
 
             $('#' + fullID + ' .btn-edit').click(function(){
-            	prepareNavEditor(fullID); 
-            	openNavEditor(); 
-            	return false;
+                openNavEditor(fullID, '');
+                return false;
             });
 
             $('#' + fullID + ' .btn-delete').click(function(){
@@ -118,7 +173,7 @@
             });
         }
 
-        function addChild(parent, name, page_id, link, active)
+        function addChild(parent, name, page_id, link, active, origID = '')
         {
             var subNavTotal = $(parent + " .sub-nav-item").size();
             subNavTotal++;
@@ -140,15 +195,15 @@
             			+	'<span class="page_id">' + page_id + '</span>'
             			+	'<span class="link">' + link + '</span>'
             			+	'<span class="active">' + active + '</span>'
+                        +   '<span class="origid">' + origID + '</span>'
             			+'</div>';          
             newLine += '</li>';
 
             $(parent + " ul").append(newLine);
 
             $('#' + fullID + ' .btn-edit').click(function(){
-            	prepareSubnavEditor(fullID); 
-            	openSubNavEditor(); 
-            	return false;
+                openNavEditor(fullID, parentID);
+                return false;
             });
 
             $('#' + fullID + ' .btn-delete').click(function(){
@@ -156,6 +211,128 @@
             	return false;
             });
         }
-            
+
+        function openNavEditor(nav_id = '', parent_id = '')
+        {
+            if (parent_id == '' && nav_id == '') {
+                //Add new parent nav item
+                $("#navEditor .nav_id").val("");
+                $("#navEditor .parent_id").val("");
+                $("#navEditor .name").val("");
+                $("#navEditor .pageid").val("");
+                $("#navEditor .link").val("");
+                $("#navEditor .active").val("1");
+
+            }else if(parent_id != '' && nav_id == '') {
+                //Add new child nav item   
+                $("#navEditor .nav_id").val("");
+                $("#navEditor .parent_id").val(parent_id);
+                $("#navEditor .name").val("");
+                $("#navEditor .pageid").val("");
+                $("#navEditor .link").val("");
+                $("#navEditor .active").val("1");
+
+            }else if(nav_id != '') {
+
+                $("#navEditor .nav_id").val(nav_id);
+                $("#navEditor .parent_id").val(parent_id);
+                $("#navEditor .name").val($("#" + nav_id + ".heading").html());
+                $("#navEditor .page_id").val($("#" + nav_id + ".page_id").text());
+                $("#navEditor .link").val($("#" + nav_id + ".link").text());
+                $("#navEditor .active").val($("#" + nav_id + ".active").text());
+                //Update parent/child nav item
+            }
+
+            $("#navEditor").modal('show');   
+        }
+
+        function updateNavigationContainer()
+        {
+            var nav_id = $("#navEditor .nav_id").val();
+            var parent_id = $("#navEditor .parent_id").val();
+            var name = $("#navEditor .name").val();
+            var page_id = $("#navEditor .page_id").val();
+            var link = $("#navEditor .link").val();
+            var active = $("#navEditor .active").val();
+
+            if (parent_id == '' && nav_id == '') {
+                addParent("#nav-container", name, page_id, link, active);
+
+            }else if(parent_id != '' && nav_id == '') {
+
+                addChild("#" + parent_id, name, page_id, link, active);
+
+            }else if(nav_id != '') {
+
+                $("#" + nav_id + ".heading").html(name);
+                $("#" + nav_id + ".page_id").text(page_id);
+                $("#" + nav_id + ".link").text(link);
+                $("#" + nav_id + ".active").text(active);
+            }
+        }
+
+        function deleteNav(id)
+        {
+            if(confirm("Are you sure you want to remove this item?"))
+            {
+               $("#" + id).remove();
+            }
+        }
+
+        function saveNavigation()
+        {
+            var totalTop = $("#nav-container .nav-item").size();
+            var navItems = [];
+
+            var counter = 0;
+            $("#nav-container .nav-item").each(function(){
+
+                var parentNav = $(this);
+                navItems[counter] = {
+                    name : parentNav.find('.heading').html(),
+                    page_id : parentNav.find('.page_id').text(),
+                    link : parentNav.find('.link').text(),
+                    active : parentNav.find('.active').text(),
+                    origid : parentNav.find('.origid').text(),
+                    subnavs : []
+                }
+
+                var nav_id = parentNav.attr('id');
+                var subcounter = 0;
+                parentNav.find(".sub-nav-item").each(function(){
+                    var sub_nav_id = $(this);
+                    navItems[counter].subnavs[subcounter] = {
+                        name : $(this).find('.heading').html(),
+                        page_id : $(this).find('.page_id').text(),
+                        link : $(this).find('.link').text(),
+                        active : $(this).find('.active').text(),
+                        origid : $(this).find('.origid').text(),
+                    }
+                    subcounter++;
+                });
+
+                counter++;
+            });
+
+            var params = {};
+            params.nav_type = {{ $nav_type }};
+            params.nav_items = JSON.stringify(navItems); 
+
+            $.ajax({
+                url: '/admin/navigation/save',
+                type: 'post',
+                data: params,
+                dataType: 'JSON',
+                success: function (result) {
+                    if (result.success) {
+                        alert("Navigation is saved");
+                    }
+                },
+                error: function () {
+                    alert('Failed.');
+                }
+            }); 
+        }
+
 	</script>
 @endsection
