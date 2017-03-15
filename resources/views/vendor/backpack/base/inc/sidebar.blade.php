@@ -20,6 +20,14 @@
           <!-- ==== Recommended place for admin menu items ==== -->
           <!-- ================================================ -->
           <li><a href="{{ url(config('backpack.base.route_prefix', 'admin').'/dashboard') }}"><i class="fa fa-dashboard"></i> <span>{{ trans('backpack::base.dashboard') }}</span></a></li>
+
+          <li class="treeview">
+              <a href="#"><i class="fa fa-sitemap"></i> <span>Site</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">
+                <li><a href="/admin/navigation/TOP"><i class="fa fa-list"></i> <span>Navigation</span></a></li>
+              </ul>
+          </li>
+
           <li><a href="{{ url('admin/page') }}"><i class="fa fa-file-o"></i> <span>Pages</span></a></li>
 
           <li class="treeview">

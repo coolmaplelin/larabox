@@ -29,11 +29,9 @@
 		min-height: 190px;
 		min-width: 220px;
 		padding: 5px;
-		&.active {
-			background-color: #FFFFFF;
-		}
+		background-color: #FFFFFF;
 		&.inactive {
-			background-color: #CCCCCC;border: 2px solid #999;
+			background-color: #eeeeee;border: 1px solid #999;
 		}
 	}
 	.heading {
@@ -52,11 +50,10 @@
 		.sub-nav-item{
 			float: left; 
 			width: 215px;
-			&.active {
-				background-color: #FFFFFF;
-			}
+			background-color: #FFFFFF;
+			
 			&.inactive {
-				background-color: #CCCCCC;border: 2px solid #999;
+				background-color: #eeeeee;border: 1px solid #999;
 			}
 		}
 

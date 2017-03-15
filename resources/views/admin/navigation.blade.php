@@ -133,7 +133,7 @@
             totalNav++;
             var fullID = 'nav-' + totalNav;
 
-            var newLine = '<li id="' + fullID + '" class="nav-item ' + (active == 1 ? 'active' :'inactive') + '" data-id="' + fullID + '">';
+            var newLine = '<li id="' + fullID + '" class="nav-item ' + (active == 1 ? '' :'inactive') + '" data-id="' + fullID + '">';
             
             var buttons = ' <button type="button" class="btn btn-default btn-add btn-xs">' 
                           + '	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>'
@@ -181,7 +181,7 @@
             var parentID = parentIDArray[1];
             var fullID = parentID + '-sub-nav-' + subNavTotal;
 
-            var newLine = '<li id="' + fullID + '" class="sub-nav-item ' + (active == 1 ? 'active' :'inactive') + '">';
+            var newLine = '<li id="' + fullID + '" class="sub-nav-item ' + (active == 1 ? '' :'inactive') + '">';
 
             var buttons = '<button type="button" class="btn btn-default btn-edit btn-xs">'
                           + '	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>'
@@ -216,6 +216,7 @@
         {
             if (parent_id == '' && nav_id == '') {
                 //Add new parent nav item
+                $("#navEditor .modal-title").html('New Item');
                 $("#navEditor .nav_id").val("");
                 $("#navEditor .parent_id").val("");
                 $("#navEditor .name").val("");
@@ -225,6 +226,8 @@
 
             }else if(parent_id != '' && nav_id == '') {
                 //Add new child nav item   
+                $("#navEditor .modal-title").html('New Sub Item of ' + $('#' + parent_id).find('.heading').html());
+
                 $("#navEditor .nav_id").val("");
                 $("#navEditor .parent_id").val(parent_id);
                 $("#navEditor .name").val("");
@@ -234,12 +237,14 @@
 
             }else if(nav_id != '') {
 
+                $("#navEditor .modal-title").html('Edit Item');
+
                 $("#navEditor .nav_id").val(nav_id);
                 $("#navEditor .parent_id").val(parent_id);
-                $("#navEditor .name").val($("#" + nav_id + ".heading").html());
-                $("#navEditor .page_id").val($("#" + nav_id + ".page_id").text());
-                $("#navEditor .link").val($("#" + nav_id + ".link").text());
-                $("#navEditor .active").val($("#" + nav_id + ".active").text());
+                $("#navEditor .name").val($("#" + nav_id).find("> .heading").html());
+                $("#navEditor .page_id").val($("#" + nav_id).find("> .data .page_id").text());
+                $("#navEditor .link").val($("#" + nav_id).find("> .data .link").text());
+                $("#navEditor .active").val($("#" + nav_id).find("> .data .active").text());
                 //Update parent/child nav item
             }
 
@@ -264,10 +269,15 @@
 
             }else if(nav_id != '') {
 
-                $("#" + nav_id + ".heading").html(name);
-                $("#" + nav_id + ".page_id").text(page_id);
-                $("#" + nav_id + ".link").text(link);
-                $("#" + nav_id + ".active").text(active);
+                $("#" + nav_id).find("> .heading").html(name);
+                $("#" + nav_id).find("> .data .page_id").text(page_id);
+                $("#" + nav_id).find("> .data .link").text(link);
+                $("#" + nav_id).find("> .data .active").text(active);
+
+                if (active == "1" && $("#" + nav_id).hasClass('inactive') || active == "0" && !$("#" + nav_id).hasClass('inactive')) {
+                    $("#" + nav_id).toggleClass('inactive');
+                }
+
             }
         }
 
@@ -281,7 +291,6 @@
 
         function saveNavigation()
         {
-            var totalTop = $("#nav-container .nav-item").size();
             var navItems = [];
 
             var counter = 0;
@@ -289,11 +298,11 @@
 
                 var parentNav = $(this);
                 navItems[counter] = {
-                    name : parentNav.find('.heading').html(),
-                    page_id : parentNav.find('.page_id').text(),
-                    link : parentNav.find('.link').text(),
-                    active : parentNav.find('.active').text(),
-                    origid : parentNav.find('.origid').text(),
+                    name : parentNav.find('> .heading').html(),
+                    page_id : parentNav.find('> .data .page_id').text(),
+                    link : parentNav.find('> .data .link').text(),
+                    active : parentNav.find('> .data .active').text(),
+                    origid : parentNav.find('> .data .origid').text(),
                     subnavs : []
                 }
 
@@ -315,7 +324,7 @@
             });
 
             var params = {};
-            params.nav_type = {{ $nav_type }};
+            params.nav_type = '{{ $nav_type }}';
             params.nav_items = JSON.stringify(navItems); 
 
             $.ajax({
