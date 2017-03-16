@@ -20,25 +20,25 @@
 
 			<div class="box">
 		    	<div class="box-header with-border">
-					<div class="dataTables_length">
+					<div class="form-inline">
 						<label>Currently Editing: 
 							<select id="menuSelector" class="form-control">
 				                <option value='TOP' @if ($nav_type == 'TOP') selected @endif >Top Menu</option>
 				                <option value='FOOTER' @if ($nav_type == 'FOOTER') selected @endif >Footer Links</option>
 				            </select>  
 						</label>
-                        <a href="#" class="btn btn-primary ladda-button" onClick="openNavEditor(); return false">
-                        	<span class="ladda-label"><i class="fa fa-plus"></i> Add menu item</span>
-                        </a>
                         <a href="#" class="btn btn-success ladda-button" onClick="saveNavigation();return false">
-                            <span class="ladda-label"><i class="fa fa-save"></i> Save all</span>
+                            <span class="ladda-label"><i class="fa fa-save"></i> Save All</span>
                         </a>
 					</div>
 		    	</div>
 
 		    	<div class="box-body">
 		    		<div class="nav-scrollable">
-                        <ul id="nav-container" class="clearfix"></ul>
+                        <ul id="nav-container" class=""></ul>
+                        <a href="#" class="btn btn-primary ladda-button clearfix" style="float:left" onClick="openNavEditor(); return false">
+                            <span class="ladda-label"><i class="fa fa-plus"></i> Add Another</span>
+                        </a>
                     </div>
 				</div>
 		    </div>
@@ -109,6 +109,10 @@
         var navType = '{{ $nav_type }}';
 
         $(function() {
+            $("#menuSelector").change(function(){
+                window.location = '/admin/navigation/' + $(this).val();
+            });
+
             $("#nav-container").sortable();
             
             @foreach ($parentNavElements as $parentNavElement)
@@ -210,6 +214,8 @@
             	deleteNav(fullID); 
             	return false;
             });
+
+            $(parent + " ul").sortable();
         }
 
         function openNavEditor(nav_id = '', parent_id = '')

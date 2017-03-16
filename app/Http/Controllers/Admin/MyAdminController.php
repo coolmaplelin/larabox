@@ -59,7 +59,7 @@ class MyAdminController extends Controller
 
         $allNavIds = [];
 
-        foreach($nav_items_array as $parent_nav) {
+        foreach($nav_items_array as $sort => $parent_nav) {
 
           if ($parent_nav['origid']) {
             $Navigation = Navigation::find($parent_nav['origid']);
@@ -72,12 +72,13 @@ class MyAdminController extends Controller
           $Navigation->page_id = $parent_nav['page_id'] ? $parent_nav['page_id'] : NULL;
           $Navigation->link = $parent_nav['link'];
           $Navigation->active = $parent_nav['active'];
+          $Navigation->sort = $sort + 1;
           $Navigation->save();
           $allNavIds[] = $Navigation->id;
 
           if (count($parent_nav['subnavs']) > 0) {
             $sub_items_array = $parent_nav['subnavs'];
-            foreach($sub_items_array as $sub_nav) {
+            foreach($sub_items_array as $sub_sort => $sub_nav) {
               if ($sub_nav['origid']) {
                 $SubNavigation = Navigation::find($sub_nav['origid']);
               }else{
@@ -90,6 +91,7 @@ class MyAdminController extends Controller
               $SubNavigation->page_id = $sub_nav['page_id'] ? $sub_nav['page_id'] : NULL;
               $SubNavigation->link = $sub_nav['link'];
               $SubNavigation->active = $sub_nav['active'];
+              $SubNavigation->sort = $sub_sort + 1;
               $SubNavigation->save();
 
               $allNavIds[] = $SubNavigation->id;

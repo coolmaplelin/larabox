@@ -27,7 +27,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function()
   // Custom ADMIN routes
     Route::get('page/{id}/gallery', 'Admin\PageCrudController@gallery');
     Route::post('navigation/save', 'Admin\MyAdminController@saveNav');
-    Route::get('navigation/{nav_type}', 'Admin\MyAdminController@showNav');
+    Route::get('navigation/{nav_type}', 'Admin\MyAdminController@showNav')->name('adminnav');
   
   // [...] other routes
 });

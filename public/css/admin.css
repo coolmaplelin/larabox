@@ -24,31 +24,30 @@
     list-style-type: none;
     margin: 3px;
     min-height: 190px;
-    min-width: 220px;
+    min-width: 230px;
     padding: 5px;
     background-color: #FFFFFF; }
     #nav-container .nav-item.inactive {
-      background-color: #eeeeee;
-      border: 1px solid #999; }
+      background-color: #dddddd; }
+      #nav-container .nav-item.inactive .sub-nav-item {
+        background-color: #dddddd; }
   #nav-container .heading {
-    float: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    width: 140px; }
+    width: 130px; }
   #nav-container .controls {
     float: right; }
   #nav-container .nav-inner {
-    padding-left: 0;
-    width: 100%; }
+    padding-left: 0; }
     #nav-container .nav-inner .sub-nav-item {
       float: left;
-      width: 215px;
-      background-color: #FFFFFF; }
+      background-color: #FFFFFF;
+      width: 100%; }
       #nav-container .nav-inner .sub-nav-item.inactive {
-        background-color: #eeeeee;
-        border: 1px solid #999; }
+        background-color: #dddddd; }
     #nav-container .nav-inner .heading {
-      padding-left: 10px; }
+      padding-left: 10px;
+      width: 110px; }
 
 /*# sourceMappingURL=admin.css.map */

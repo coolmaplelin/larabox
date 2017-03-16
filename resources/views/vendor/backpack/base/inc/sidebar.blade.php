@@ -15,16 +15,26 @@
         </div>
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
+          @php
+            $customRouteNames = ['adminnav'];
+            if (in_array(Request::route()->getName(), $customRouteNames)) {
+              $active = true;
+            }else{
+              $active = false;
+            }
+          @endphp
+
           <li class="header">{{ trans('backpack::base.administration') }}</li>
           <!-- ================================================ -->
           <!-- ==== Recommended place for admin menu items ==== -->
           <!-- ================================================ -->
           <li><a href="{{ url(config('backpack.base.route_prefix', 'admin').'/dashboard') }}"><i class="fa fa-dashboard"></i> <span>{{ trans('backpack::base.dashboard') }}</span></a></li>
 
-          <li class="treeview">
+          <li class="treeview @if ($active) active @endif">
               <a href="#"><i class="fa fa-sitemap"></i> <span>Site</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
-                <li><a href="/admin/navigation/TOP"><i class="fa fa-list"></i> <span>Navigation</span></a></li>
+                
+                <li @if ($active) class="active" @endif ><a href="/admin/navigation/TOP"><i class="fa fa-list"></i> <span>Navigation </span></a></li>
               </ul>
           </li>
 
