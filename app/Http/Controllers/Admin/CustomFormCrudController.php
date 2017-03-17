@@ -36,29 +36,40 @@ class CustomFormCrudController extends CrudController {
                 'name'  => 'name',
                 'label' => 'Form name',
                 'type'  => 'text',
+                'tab' => 'Form Details',
             ],
             [
                 'name'  => 'active',
                 'label' => 'Active',
                 'type'  => 'checkbox_toggle',
+                'tab' => 'Form Details',
             ],
             [
                 'name' => 'emails',
                 'label' => 'Emails',
                 'type'  => 'textarea',
+                'hint' => 'Supports multiple emails',
+                'tab' => 'Form Details',
             ],
             [
                 'name' => 'thankyou_title',
                 'label' => 'Thankyou Title',
                 'type'  => 'text',
+                'tab' => 'Form Details',
             ],
             [
                 'name' => 'thankyou_content',
                 'label' => 'Thankyou Content',
                 'type' => 'wysiwyg',
                 'placeholder' => 'Your content here',
+                'tab' => 'Form Details',
             ],
-
+            [
+                'name' => 'form_fields',
+                'label' => 'Fields',
+                'type'  => 'form_fields_panel',
+                'tab' => 'Form Elements',
+            ],
         ]);
 
     }

@@ -34,7 +34,7 @@
 		    	</div>
 
 		    	<div class="box-body">
-		    		<div class="nav-scrollable">
+		    		<div class="nav-panel">
                         <ul id="nav-container" class=""></ul>
                         <a href="#" class="btn btn-primary ladda-button clearfix" style="float:left" onClick="openNavEditor(); return false">
                             <span class="ladda-label"><i class="fa fa-plus"></i> Add Another</span>

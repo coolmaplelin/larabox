@@ -8,7 +8,7 @@
     clear: both;
     height: 0; }
 
-.nav-scrollable {
+.nav-panel {
   background: url("../images/app-bg.png") repeat scroll 0 0 #ffffff;
   border: 1px solid #cccccc;
   min-height: 220px;
