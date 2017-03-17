@@ -39,6 +39,7 @@
           </li>
 
           <li><a href="{{ url('admin/page') }}"><i class="fa fa-file-o"></i> <span>Pages</span></a></li>
+          <li><a href="{{ url('admin/customform') }}"><i class="fa fa-wpforms"></i> <span>Custom Forms</span></a></li>
 
           <li class="treeview">
               <a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span> <i class="fa fa-angle-left pull-right"></i></a>
