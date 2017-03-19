@@ -15,6 +15,8 @@
     border: 1px solid #cccccc;
     min-height: 220px;
     padding: 5px;
+    display: flex;
+  	flex-direction: column;
 }
 
 #nav-container{
@@ -64,5 +66,12 @@
 			width: 110px;
 		}
 	}
+
 }
 
+.form-group{
+	.required:after{
+		content : " *";
+		color: red;
+	}
+}

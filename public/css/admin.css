@@ -12,7 +12,9 @@
   background: url("../images/app-bg.png") repeat scroll 0 0 #ffffff;
   border: 1px solid #cccccc;
   min-height: 220px;
-  padding: 5px; }
+  padding: 5px;
+  display: flex;
+  flex-direction: column; }
 
 #nav-container {
   padding-left: 0; }
@@ -49,5 +51,9 @@
     #nav-container .nav-inner .heading {
       padding-left: 10px;
       width: 110px; }
+
+.form-group .required:after {
+  content: " *";
+  color: red; }
 
 /*# sourceMappingURL=admin.css.map */

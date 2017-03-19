@@ -112,6 +112,16 @@ class CustomFormCrudController extends CrudController {
         // show a success message
         \Alert::success(trans('backpack::crud.update_success'))->flash();
 
+        // redirect the user where he chose to be redirected
+        switch (\Request::input('save_action')) {
+            case 'save_and_edit':
+                return \Redirect::to($this->crud->route.'/'.\Request::get('id').'/edit');
+            case 'save_and_new' :
+                return \Redirect::to($this->crud->route.'/create');
+            default:
+                return \Redirect::to($this->crud->route);
+        }
+
         return \Redirect::to($this->crud->route);
         
 		//return parent::updateCrud();
