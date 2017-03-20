@@ -1,0 +1,5 @@
+.form-group label.required:after {
+  content: " *";
+  color: red; }
+
+/*# sourceMappingURL=style.css.map */

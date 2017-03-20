@@ -47,5 +47,10 @@ Route::group(['prefix' => 'fileupload'], function()
 	Route::post('saveextras/{entity_name}/{entity_id}', 'FileUploadController@saveextras');
 });
 
-
+// Custom Form Module
+Route::group(['prefix' => 'form'], function()
+{
+  Route::get('/{slug}', 'CustomFormController@show');
+  Route::post('/{slug}', 'CustomFormController@saveentry');
+});
 

@@ -52,16 +52,9 @@ class CustomFormCrudController extends CrudController {
                 'tab' => 'Form Details',
             ],
             [
-                'name' => 'thankyou_title',
-                'label' => 'Thankyou Title',
-                'type'  => 'text',
-                'tab' => 'Form Details',
-            ],
-            [
-                'name' => 'thankyou_content',
-                'label' => 'Thankyou Content',
-                'type' => 'wysiwyg',
-                'placeholder' => 'Your content here',
+                'name' => 'instructions',
+                'label' => 'Instructions',
+                'type'  => 'wysiwyg',
                 'tab' => 'Form Details',
             ],
             [
@@ -69,6 +62,19 @@ class CustomFormCrudController extends CrudController {
                 'label' => 'Fields',
                 'type'  => 'form_fields_panel',
                 'tab' => 'Form Elements',
+            ],
+            [
+                'name' => 'thankyou_title',
+                'label' => 'Thankyou Title',
+                'type'  => 'text',
+                'tab' => 'Thankyou Page',
+            ],
+            [
+                'name' => 'thankyou_content',
+                'label' => 'Thankyou Content',
+                'type' => 'wysiwyg',
+                'placeholder' => 'Your content here',
+                'tab' => 'Thankyou Page',
             ],
         ]);
 

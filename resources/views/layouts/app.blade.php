@@ -8,10 +8,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }} @yield('pageTitle')</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
     <!-- Scripts -->
     <script>
@@ -82,6 +83,10 @@
     </div>
 
     <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+
+    @yield('after_scripts')
+    
 </body>
 </html>
