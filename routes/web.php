@@ -52,5 +52,6 @@ Route::group(['prefix' => 'form'], function()
 {
   Route::get('/{slug}', 'CustomFormController@show');
   Route::post('/{slug}', 'CustomFormController@saveentry');
+  Route::get('/{slug}/thankyou', 'CustomFormController@thankyou');
 });
 

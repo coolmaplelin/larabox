@@ -38,28 +38,31 @@
                                     @if ($FormField['type'] == 'select')
                                         <select class='form-control' name='formentry[{{ $nameSlug }}]' @if ($FormField['manda'] == "1") required @endif>
                                             @for ($i = 0; $i < count($options_array); $i++)
-                                                <option value="{{ $i }} ">{{ $options_array[$i] }}</option>
+                                                @php $valueSlug = str_slug($options_array[$i]); @endphp
+                                                <option value="{{ $valueSlug }}">{{ $options_array[$i] }}</option>
                                             @endfor
                                         </select>
 
                                     @elseif ($FormField['type'] == 'radio')
                                         @for ($i = 0; $i < count($options_array); $i++)
+                                            @php $valueSlug = str_slug($options_array[$i]); @endphp
                                             <div class='radio'>
-                                                <label><input type='radio' name='formentry[{{ $nameSlug }}]' value="{{ $i }}" @if ($FormField['manda'] == "1") required @endif /> {{ $options_array[$i] }}</label>
+                                                <label><input type='radio' name='formentry[{{ $nameSlug }}]' value="{{ $valueSlug }}" @if ($FormField['manda'] == "1") required @endif /> {{ $options_array[$i] }}</label>
                                             </div>
                                         @endfor
                                     @else ($FormField['type'] == 'checkbox')
-                                        <div class="checkbox-group @if ($FormField['manda'] == "1") required @endif">
+                                        <div id="testcheckbox" class="checkbox-group @if ($FormField['manda'] == "1") required @endif">
                                             @for ($i = 0; $i < count($options_array); $i++)
+                                                @php $valueSlug = str_slug($options_array[$i]); @endphp
                                                 <div class='checkbox'>
-                                                    <label><input type='checkbox' name='formentry[{{ $nameSlug }}][]' value="{{ $i }}"/> {{ $options_array[$i] }}</label>
+                                                    <label><input type='checkbox' name='formentry[{{ $nameSlug }}][]' value="{{ $valueSlug }}"/> {{ $options_array[$i] }}</label>
                                                 </div>
                                             @endfor
                                         </div>
                                     @endif
 
                                 @elseif ($FormField['type'] == 'image')
-                                    <br/><label class="btn btn-default btn-file">Browse <input type="file" name='formentry[{{ $nameSlug }}]' class="hidden"> </label>
+                                    <br/><input type="file" name='{{ $nameSlug }}' accept="image/*">
                                 @else
                                     field is not valid!!!
                                 @endif
@@ -86,11 +89,28 @@
 <script type="text/javascript">
 $(function(){
     $(".custom-form .btn-primary").click(function(event){
+        
+        var requiredNotValid = false;
         if ($('div.checkbox-group.required :checkbox:checked').length > 0) {
 
         }else{
-            event.preventDefault();
+            requiredNotValid = true;
             alert('checkbox is required');
+        }
+
+        var fileNotValid = false;
+        $("input[type='file']").each(function(){
+          if($(this).get(0).files.length > 0){ // only if a file is selected
+            var fileSize = $(this).get(0).files[0].size;
+            if (fileSize > 2097152) {
+                fileNotValid = true;
+                alert('File must be less than 2mb.');
+            }
+          }
+        });
+
+        if (requiredNotValid || fileNotValid) {
+            event.preventDefault();
         }
     });
 })

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use App\Models\CustomForm;
 use App\Models\CustomFormEntry;
 
@@ -32,8 +33,46 @@ class CustomFormController extends Controller
         }
         
         $formentry = $request->get('formentry');
-        var_dump($formentry);
+        $FormFields = json_decode($CustomForm->form_fields, true);
+        $FormFieldsValue = $FormFields;
 
-        die();
+        foreach($FormFields as $key => $FormField) {
+
+            $nameSlug = str_slug($FormField['title']);
+
+            if ($FormField['type'] == 'checkbox') {
+                $FormFieldsValue[$key]['value'] = !empty($formentry[$nameSlug]) ? implode(",", $formentry[$nameSlug]) : '';
+            }elseif ($FormField['type'] == 'image') {
+                if ($request->file($nameSlug)) {
+                    $file = $request->file($nameSlug);
+                    $original_name = $file->getClientOriginalName();
+
+                    $path = $request->file($nameSlug)->storeAs('userupload', $original_name, 'assets');
+                    $FormFieldsValue[$key]['value'] = '/assets/'.$path;
+                }
+                
+            }else{
+                $FormFieldsValue[$key]['value'] = $formentry[$nameSlug];
+            }
+        }
+
+        //var_dump($FormFieldsValue);
+
+        $CustomFormEntry = new CustomFormEntry();
+        $CustomFormEntry->form_id = $CustomForm->id;
+        $CustomFormEntry->form_fields = json_encode($FormFieldsValue);
+        $CustomFormEntry->save();
+
+        return \Redirect::to($CustomForm->getFullUrl()."/thankyou");
+    }
+
+    public function thankyou($slug)
+    {
+        $CustomForm = CustomForm::where('slug', $slug)->first();
+        if (!$CustomForm) {
+            return response(view('errors.404'), 404);
+        }
+
+        return view('public.custom_form.thankyou', ['CustomForm' => $CustomForm]);
     }
 }
