@@ -24,11 +24,13 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function()
     CRUD::resource('user', 'Admin\UserCrudController');
     CRUD::resource('page', 'Admin\PageCrudController');
     CRUD::resource('customform', 'Admin\CustomFormCrudController');
+    CRUD::resource('customformentry', 'Admin\CustomFormEntryCrudController');
 
   // Custom ADMIN routes
     Route::get('page/{id}/gallery', 'Admin\PageCrudController@gallery');
     Route::post('navigation/save', 'Admin\MyAdminController@saveNav');
     Route::get('navigation/{nav_type}', 'Admin\MyAdminController@showNav')->name('adminnav');
+    Route::get('customformentry/{id}/view', 'Admin\CustomFormEntryCrudController@view');
   
   // [...] other routes
 });
