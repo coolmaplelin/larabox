@@ -91,11 +91,13 @@ $(function(){
     $(".custom-form .btn-primary").click(function(event){
         
         var requiredNotValid = false;
-        if ($('div.checkbox-group.required :checkbox:checked').length > 0) {
+        if ($('div.checkbox-group.required').length > 0) {
+            if ($('div.checkbox-group.required :checkbox:checked').length > 0) {
 
-        }else{
-            requiredNotValid = true;
-            alert('checkbox is required');
+            }else{
+                requiredNotValid = true;
+                alert('checkbox is required');
+            }
         }
 
         var fileNotValid = false;

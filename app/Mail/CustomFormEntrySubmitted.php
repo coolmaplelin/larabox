@@ -36,9 +36,8 @@ class CustomFormEntrySubmitted extends Mailable
      */
     public function build()
     {
-        //return $this->view('view.name');
-        return $this->markdown('emails.custom_entry_submitted')
-                ->with([
+        return $this->view('emails.custom_entry_submitted')
+            ->with([
                     'CustomFormEntry' => $this->CustomFormEntry,
                 ]);
     }
