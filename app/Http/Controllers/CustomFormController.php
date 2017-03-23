@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CustomFormEntrySubmitted;
 use App\Models\CustomForm;
 use App\Models\CustomFormEntry;
+use App\Http\Helpers\StringHelper;
 
 class CustomFormController extends Controller
 {
@@ -62,6 +65,13 @@ class CustomFormController extends Controller
         $CustomFormEntry->form_id = $CustomForm->id;
         $CustomFormEntry->form_fields = json_encode($FormFieldsValue);
         $CustomFormEntry->save();
+
+        $notifyEmails = StringHelper::parseEmails($CustomForm->emails);
+        foreach($notifyEmails as $notifyEmail) {
+            if ($notifyEmail != '') {
+                Mail::to($notifyEmail)->send(new CustomFormEntrySubmitted($CustomFormEntry));
+            }
+        }
 
         return \Redirect::to($CustomForm->getFullUrl()."/thankyou");
     }
