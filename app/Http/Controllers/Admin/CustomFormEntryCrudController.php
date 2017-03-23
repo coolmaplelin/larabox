@@ -63,6 +63,8 @@ class CustomFormEntryCrudController extends CrudController {
 
         $this->data['form_fields'] = json_decode($this->data['entry']->form_fields, true);
 
+        //var_dump($this->data['form_fields']);die();
+
         return view('admin.custom_form_entry.view', $this->data);
         //return view($this->crud->getEditView(), $this->data);
     }

@@ -51,7 +51,7 @@
                                             </div>
                                         @endfor
                                     @else ($FormField['type'] == 'checkbox')
-                                        <div id="testcheckbox" class="checkbox-group @if ($FormField['manda'] == "1") required @endif">
+                                        <div class="checkbox-group @if ($FormField['manda'] == "1") required @endif">
                                             @for ($i = 0; $i < count($options_array); $i++)
                                                 @php $valueSlug = str_slug($options_array[$i]); @endphp
                                                 <div class='checkbox'>

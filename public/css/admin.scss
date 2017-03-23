@@ -70,7 +70,7 @@
 }
 
 .form-group{
-	.required:after{
+	label.required:after{
 		content : " *";
 		color: red;
 	}

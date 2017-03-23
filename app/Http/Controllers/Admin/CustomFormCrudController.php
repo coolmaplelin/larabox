@@ -15,6 +15,8 @@ class CustomFormCrudController extends CrudController {
         $this->crud->setRoute("admin/customform");
         $this->crud->setEntityNameStrings('custom form', 'custom forms');
 
+        $this->crud->addButton('line', 'view entry', 'view', 'admin.custom_form.buttons.view_entry', 'beginning');
+
         $this->crud->setColumns([
         	[
 	            'name' => 'name',

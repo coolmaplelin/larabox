@@ -52,7 +52,7 @@
       padding-left: 10px;
       width: 110px; }
 
-.form-group .required:after {
+.form-group label.required:after {
   content: " *";
   color: red; }
 
