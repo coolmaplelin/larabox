@@ -52,6 +52,7 @@ Route::group(['prefix' => 'fileupload'], function()
 // Custom Form Module
 Route::group(['prefix' => 'form'], function()
 {
+  Route::get('/email', 'CustomFormController@testemail');
   Route::get('/{slug}', 'CustomFormController@show');
   Route::post('/{slug}', 'CustomFormController@saveentry');
   Route::get('/{slug}/thankyou', 'CustomFormController@thankyou');

@@ -85,4 +85,12 @@ class CustomFormController extends Controller
 
         return view('public.custom_form.thankyou', ['CustomForm' => $CustomForm]);
     }
+
+    public function testemail()
+    {
+        return view('emails.custom_entry_submitted')
+            ->with([
+                    'CustomFormEntry' => CustomFormEntry::find(1),
+                ]);
+    }
 }
