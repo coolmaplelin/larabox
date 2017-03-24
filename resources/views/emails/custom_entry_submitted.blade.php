@@ -12,11 +12,14 @@
 
 	<p>This was sent at {{ date('d/m/Y H:i', strtotime($CustomFormEntry->created_at)) }}. </p>
 
+	<p>{{ str_pad("", 100, "-") }}</p>
+	{!! $formdata !!}
+    <p>{{ str_pad("", 100, "-") }}</p>
 
 	<p>This is an auto generated email from system, please do not reply.  </p>
 
-	<p>Thanks, </p>
-
-	</p>{{ config('app.name') }}</p>
-
+	<p>
+		Thanks, <br/>
+		{{ config('app.name') }}
+	</p>
 @endsection

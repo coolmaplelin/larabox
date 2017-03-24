@@ -36,9 +36,59 @@ class CustomFormEntrySubmitted extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.custom_entry_submitted')
+        $formString = "";
+        $attachment = [];
+        foreach(json_decode($this->CustomFormEntry->form_fields, true) as $form_field) {
+            $formString .= $form_field['title'] . " : ";
+            switch($form_field['type']) {
+                case 'text':
+                case 'textbox':
+                case 'email':
+                    $formString .= $form_field['value'];
+                    break;
+                case 'select':
+                case 'radio':
+                    $options_array = explode("\n", $form_field['options']);
+                    foreach($options_array as $option) {
+                        $valueSlug = str_slug($option);
+                        if ($valueSlug == $form_field['value']) {
+                            $formString .= $option;
+                            break;
+                        }
+                    }
+                    break;
+                case 'checkbox':
+                    $options_array = explode("\n", $form_field['options']);
+                    $valueArray = explode(',', $form_field['value']);
+                    foreach($options_array as $key => $option) {
+                        $valueSlug = str_slug($option);
+                        if (in_array($valueSlug, $valueArray)) {
+                            if ($key > 0) {
+                                $formString .= ",";
+                            }
+                            $formString .= $option;
+                        }
+                    }    
+                    break;
+                case 'image':
+                    $formString .= "see attachment";
+                    $attachment[] = base_path().'/public'.$form_field['value'];
+                    break;
+            }
+            $formString .= "<br/>";
+
+        }
+
+        foreach($attachment as $file) {
+            $this->attach($file);
+        }
+
+        return $this->subject(config('app.name')." :: Form Entry Submitted")
+            ->view('emails.custom_entry_submitted')
             ->with([
                     'CustomFormEntry' => $this->CustomFormEntry,
+                    'formdata' => $formString
                 ]);
+
     }
 }

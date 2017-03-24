@@ -58,3 +58,6 @@ Route::group(['prefix' => 'form'], function()
   Route::get('/{slug}/thankyou', 'CustomFormController@thankyou');
 });
 
+
+// CMS Page 
+Route::get('/{wildcard}', 'PageController@index')->where('wildcard', '.+');

@@ -5,7 +5,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body style="margin:0; font-family: Avenir, Helvetica, sans-serif;">
-    <!-- <link href="{{ asset('css/email.css') }}" rel="stylesheet">  -->
     <style>
         @media only screen and (max-width: 600px) {
             .inner-body {
