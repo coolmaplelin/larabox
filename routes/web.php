@@ -25,6 +25,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function()
     CRUD::resource('page', 'Admin\PageCrudController');
     CRUD::resource('customform', 'Admin\CustomFormCrudController');
     CRUD::resource('customformentry', 'Admin\CustomFormEntryCrudController');
+    CRUD::resource('redirect', 'Admin\RedirectCrudController');
 
   // Custom ADMIN routes
     Route::get('page/{id}/gallery', 'Admin\PageCrudController@gallery');
@@ -60,4 +61,4 @@ Route::group(['prefix' => 'form'], function()
 
 
 // CMS Page 
-Route::get('/{wildcard}', 'PageController@index')->where('wildcard', '.+');
+//Route::get('/{wildcard}', 'PageController@index')->where('wildcard', '/^(?!admin.*$).*/g');

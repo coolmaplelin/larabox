@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Backpack\CRUD\CrudTrait;
+use App\Models\Redirect;
 
 
 class Page extends Model
@@ -129,8 +130,20 @@ class Page extends Model
 
         static::updated(function($page) {
 
-            //var_dump($page->getDirty());die();
             $changed = $page->getDirty();
+
+            if(array_key_exists('slug', $changed)) {
+                $oldSlug = $page->getOriginal('slug');
+                $newSlug = $changed['slug'];
+                if ($oldSlug != $newSlug) {
+                    $Redirect = new Redirect();
+                    $Redirect->type = 'system';
+                    $Redirect->from = $oldSlug;
+                    $Redirect->to = $newSlug;
+                    $Redirect->save();
+                }
+            }
+
             if (array_key_exists('parent_id', $changed) || array_key_exists('title', $changed)) {
                 //Re generate slug for children
                 $children = $page->children;
@@ -148,7 +161,6 @@ class Page extends Model
                         $child->save();
                     }
                 }
-
             }
         });
 
