@@ -20,6 +20,7 @@ Route::get('/', function () {
 // Admin Interface Routes
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function()
 {
+
   // Backpack\CRUD: Define the resources for the entities you want to CRUD.
     CRUD::resource('user', 'Admin\UserCrudController');
     CRUD::resource('page', 'Admin\PageCrudController');
@@ -61,4 +62,6 @@ Route::group(['prefix' => 'form'], function()
 
 
 // CMS Page 
-//Route::get('/{wildcard}', 'PageController@index')->where('wildcard', '/^(?!admin.*$).*/g');
+// All url that not match above routing and not start with 'admin' will go to here
+Route::get('/{wildcard}', 'PageController@index');
+Route::pattern('wildcard', '^(?!admin.*$).*');

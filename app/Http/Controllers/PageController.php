@@ -20,6 +20,9 @@ class PageController extends Controller
         if(strpos($slug, "?") !== false)
             $slug = substr($slug, 0, strpos($slug, "?"));
 
+        if ($slug == 'admin') {
+            return redirect('/admin/login');
+        }
 
         $Page = NULL;
         if ($slug) {
