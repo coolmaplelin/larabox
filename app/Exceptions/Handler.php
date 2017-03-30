@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Models\Redirect;
 
 class Handler extends ExceptionHandler
 {
@@ -44,6 +45,19 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+    	if ($exception->getStatusCode() == '404') {
+    		//Further check if there is redirects, if there is, redirect
+    		$slug = $_SERVER['REQUEST_URI'];
+	        $slug = substr($slug, 1);
+	        if(strpos($slug, "?") !== false)
+	            $slug = substr($slug, 0, strpos($slug, "?"));
+
+	        $Redirect = Redirect::where('from', $slug)->first();
+	        if ($Redirect) {
+	        	return redirect('/'.$Redirect->to);
+	        }
+    	}
+    	
         return parent::render($request, $exception);
     }
 

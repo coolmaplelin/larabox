@@ -37,7 +37,7 @@ class CustomFormEntrySubmitted extends Mailable
     public function build()
     {
         $formString = "";
-        $attachment = [];
+        $attachment = []; 
         foreach(json_decode($this->CustomFormEntry->form_fields, true) as $form_field) {
             $formString .= $form_field['title'] . " : ";
             switch($form_field['type']) {
@@ -72,7 +72,11 @@ class CustomFormEntrySubmitted extends Mailable
                     break;
                 case 'image':
                     $formString .= "see attachment";
-                    $attachment[] = base_path().'/public'.$form_field['value'];
+                    if (isset($form_field['value']) && $form_field['value']) {
+                        $attachment[] = base_path().'/public'.$form_field['value'];
+                    }
+                    break;
+                default:
                     break;
             }
             $formString .= "<br/>";
@@ -80,8 +84,11 @@ class CustomFormEntrySubmitted extends Mailable
         }
 
         foreach($attachment as $file) {
-            $this->attach($file);
+            if (is_file($file)) {
+                $this->attach($file);
+            }
         }
+
 
         return $this->subject(config('app.name')." :: Form Entry Submitted")
             ->view('emails.custom_entry_submitted')

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Navigation;
 use App\Models\Page;
+use App\Utils\CacheUtil;
 
 class MyAdminController extends Controller
 {
@@ -108,6 +109,8 @@ class MyAdminController extends Controller
           }
         }
 
+        CacheUtil::genMenu($nav_type);
+        
         $response = ['success' => true];
         return response()->json($response);
     }

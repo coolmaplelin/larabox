@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\CustomFormEntrySubmitted;
 use App\Models\CustomForm;
 use App\Models\CustomFormEntry;
-use App\Http\Helpers\StringHelper;
+use App\Utils\StringUtil;
 
 class CustomFormController extends Controller
 {
@@ -19,12 +19,12 @@ class CustomFormController extends Controller
      */
     public function show($slug)
     {
+
         $CustomForm = CustomForm::where('slug', $slug)->first();
         if (!$CustomForm) {
-            return response(view('errors.404'), 404);
+            abort(404);
         }
 
-        //var_dump(json_decode($CustomForm->form_fields, true));
         return view('public.custom_form.show', ['CustomForm' => $CustomForm, 'FormFields' => json_decode($CustomForm->form_fields, true)]);
     }
 
@@ -66,7 +66,7 @@ class CustomFormController extends Controller
         $CustomFormEntry->form_fields = json_encode($FormFieldsValue);
         $CustomFormEntry->save();
 
-        $notifyEmails = StringHelper::parseEmails($CustomForm->emails);
+        $notifyEmails = StringUtil::parseEmails($CustomForm->emails);
         foreach($notifyEmails as $notifyEmail) {
             if ($notifyEmail != '') {
                 Mail::to($notifyEmail)->send(new CustomFormEntrySubmitted($CustomFormEntry));
@@ -88,7 +88,7 @@ class CustomFormController extends Controller
 
     public function testemail()
     {
-        $CustomFormEntry = CustomFormEntry::find(1);
+        $CustomFormEntry = CustomFormEntry::find(18);
         Mail::to('maple@163.com')->send(new CustomFormEntrySubmitted($CustomFormEntry));
         $formString = "";
         $attachment = [];

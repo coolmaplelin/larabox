@@ -43,9 +43,11 @@
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
+                    @if (is_file(base_path().'/resources/views/cache/navTOP.blade.php'))  
+                        @include('cache.navTOP')
+                    @else
+                        <ul class="nav navbar-nav">&nbsp;</ul>
+                    @endif
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">

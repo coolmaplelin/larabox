@@ -30,7 +30,7 @@ class PageController extends Controller
         }
 
         if (!$Page) {
-            return response(view('errors.404'), 404);
+            abort(404);
         }
 
         return view('public.page.index', ['Page' => $Page]);

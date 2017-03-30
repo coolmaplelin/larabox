@@ -63,5 +63,6 @@ Route::group(['prefix' => 'form'], function()
 
 // CMS Page 
 // All url that not match above routing and not start with 'admin' will go to here
-Route::get('/{wildcard}', 'PageController@index');
-Route::pattern('wildcard', '^(?!admin.*$).*');
+// Route::get('/{wildcard}', 'PageController@index');
+// Route::pattern('wildcard', '^(?!admin.*$).*');
+Route::get('/{any}', 'PageController@index')->where('any', '^(?!admin.*$).*');

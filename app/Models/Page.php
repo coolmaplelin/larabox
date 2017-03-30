@@ -42,7 +42,7 @@ class Page extends Model
     */
     public function getFullUrl()
     {
-        return '/page/'.$this->slug;
+        return '/'.$this->slug;
     }
 
     public function getParentArray()

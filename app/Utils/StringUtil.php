@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Helpers;
+namespace App\Utils;
 
-class StringHelper
+class StringUtil
 {
 
     public static function parseEmails($emailString)
