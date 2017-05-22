@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use App\Models\Redirect;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException as NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -45,7 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-    	if ($exception->getStatusCode() == '404') {
+    	if ($exception instanceof NotFoundHttpException) {
     		//Further check if there is redirects, if there is, redirect
     		$slug = $_SERVER['REQUEST_URI'];
 	        $slug = substr($slug, 1);
