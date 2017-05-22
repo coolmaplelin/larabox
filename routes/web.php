@@ -60,6 +60,14 @@ Route::group(['prefix' => 'form'], function()
   Route::get('/{slug}/thankyou', 'CustomFormController@thankyou');
 });
 
+// PDF Generator Moduel
+Route::group(['prefix' => 'pdf'], function()
+{
+  Route::get('/test', 'PDFController@test');
+  Route::get('/header', 'PDFController@header')->name('pdf_header');
+  Route::get('/footer', 'PDFController@footer')->name('pdf_footer');
+});
+
 
 // CMS Page 
 // All url that not match above routing and not start with 'admin' will go to here

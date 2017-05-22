@@ -9,6 +9,7 @@
         "backpack/base": "^0.7.16",
         "backpack/crud": "^3.2",
         "backpack/settings": "^2.0",
+        "barryvdh/laravel-snappy": "^0.3.3",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0"
     },

@@ -187,6 +187,11 @@ return [
         Barryvdh\Elfinder\ElfinderServiceProvider::class,
         Backpack\Settings\SettingsServiceProvider::class,
 
+        /*
+        * Snappy PDF Generator
+        */
+        Barryvdh\Snappy\ServiceProvider::class,
+
     ],
 
     /*
@@ -239,7 +244,8 @@ return [
         'CRUD' => Backpack\CRUD\CrudServiceProvider::class,
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
-
+        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
     ],
 
 
