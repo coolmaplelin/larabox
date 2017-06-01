@@ -60,7 +60,7 @@ Route::group(['prefix' => 'form'], function()
   Route::get('/{slug}/thankyou', 'CustomFormController@thankyou');
 });
 
-// PDF Generator Moduel
+// PDF Generator Module
 Route::group(['prefix' => 'pdf'], function()
 {
   Route::get('/test', 'PDFController@test');
@@ -68,6 +68,11 @@ Route::group(['prefix' => 'pdf'], function()
   Route::get('/footer', 'PDFController@footer')->name('pdf_footer');
 });
 
+//Page Frontend Crud
+Route::group(['prefix' => 'page'], function()
+{
+  Route::match(['get', 'post'], '/create', 'PageController@create')->name('page.create');
+});
 
 // CMS Page 
 // All url that not match above routing and not start with 'admin' will go to here

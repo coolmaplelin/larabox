@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Backpack\CRUD\CrudTrait;
 use App\Models\Redirect;
-
+use Carbon\Carbon;
 
 class Page extends Model
 {
@@ -90,7 +90,10 @@ class Page extends Model
     | ACCESORS
     |--------------------------------------------------------------------------
     */
-    
+    public function getPublishedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('m/d/Y');
+    }
 
     /*
     |--------------------------------------------------------------------------

@@ -35,4 +35,10 @@ class PageController extends Controller
 
         return view('public.page.index', ['Page' => $Page]);
     }
+
+    public function create(Request $request)
+    {
+        $Page = new Page;
+        return view('public.page.create', ['Page' => $Page]);
+    }
 }
