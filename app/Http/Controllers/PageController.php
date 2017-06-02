@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StorePageRequest;
 use App\Models\Page;
+use Carbon\Carbon;
 
 class PageController extends Controller
 {
 
     /**
-     * Show the application dashboard.
+     * Show the page
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         $slug = $_SERVER['REQUEST_URI'];
         $slug = substr($slug, 1);
@@ -36,9 +38,32 @@ class PageController extends Controller
         return view('public.page.index', ['Page' => $Page]);
     }
 
-    public function create(Request $request)
+    /**
+     * Show the form for creating a new page.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
         $Page = new Page;
         return view('public.page.create', ['Page' => $Page]);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     * Check https://laravel.com/docs/5.3/validation for more details
+     * @param  StorePageRequest $request
+     * @return \Illuminate\Http\Response
+     * 
+     */
+    public function store(StorePageRequest $request)
+    {
+        $published_at = Carbon::createFromFormat('d/m/Y', $request->get('published_at'), 'Europe/London')->toDateString();
+        
+        $Page = Page::create(request(['title', 'name', 'is_live']));
+        $Page->published_at = $published_at;
+        $Page->save();
+    }
+
+
 }

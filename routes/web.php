@@ -71,7 +71,8 @@ Route::group(['prefix' => 'pdf'], function()
 //Page Frontend Crud
 Route::group(['prefix' => 'page'], function()
 {
-  Route::match(['get', 'post'], '/create', 'PageController@create')->name('page.create');
+  Route::get('/create', 'PageController@create');
+  Route::post('/store', 'PageController@store')->name('page.store');
 });
 
 // CMS Page 
