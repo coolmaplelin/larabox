@@ -1,14 +1,17 @@
 @extends('layouts.app')
 
-@section('pageTitle', 'Create Page')
+@section('pageTitle', 'Edit Page')
 
 @section('content')
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-        	<h1>Create A Page</h1>
+        	<h1>Edit Page</h1>
 
-        	@include("public.page._form", ['route_name' => 'page.store', 'Page' => $Page])
+        	@include("inc.flash")
+
+        	@include("public.page._form", ['route_name' => 'page.update', 'Page' => $Page])
+
         </div>
     </div>
 </div>

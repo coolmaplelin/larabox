@@ -63,6 +63,18 @@ class Page extends Model
         return $rtnArray;
     }
 
+    public function generateSlug()
+    {
+        $parents = $this->getParentArray();
+        $slug = "";
+        foreach($parents as $pa)
+        {
+            $slug .= str_slug($pa->title, "-")."/";
+        }
+        $slug .= str_slug($this->title, "-");
+        return $slug;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
@@ -92,7 +104,7 @@ class Page extends Model
     */
     public function getPublishedAtAttribute($value)
     {
-        return Carbon::parse($value)->format('m/d/Y');
+        return Carbon::parse($value)->format('d/m/Y');
     }
 
     /*
@@ -104,32 +116,19 @@ class Page extends Model
         $this->attributes['published_at'] = \Date::parse($value);
     }
 
-    public function setParentIdAttribute($value) {
-        $this->attributes['parent_id'] = $value;
-
-        $slug = str_slug($this->title , "-");
-        if ($value) {
-            $Parent = Page::find($value);
-            $counter = 0;
-            while ($Parent && $counter < 100) {
-
-                $slug = str_slug($Parent->title , "-")."/".$slug;
-                if ($Parent->parent_id) {
-                    $Parent = Page::find($Parent->parent_id);
-                }else{
-                    $Parent = NULL;
-                }
-                $counter++;
-            }
-        }
-
-        $this->attributes['slug'] = $slug;
-    }
-
-
     public static function boot()
 	{
 	    parent::boot();
+
+        static::creating(function($page) {
+            $slug = $page->generateSlug();
+            $page->slug = $slug;
+        });
+
+        static::updating(function($page) {
+            $slug = $page->generateSlug();
+            $page->slug = $slug;
+        });
 
         static::updated(function($page) {
 
@@ -152,15 +151,8 @@ class Page extends Model
                 $children = $page->children;
                 if (count($children) > 0) {
                     foreach($children as $child) {
-
-                        $parents = $child->getParentArray();
-                        $slug = "";
-                        foreach($parents as $pa)
-                        {
-                            $slug .= str_slug($pa->title, "-")."/";
-                        }
-                        $slug .= str_slug($child->title, "-");
-                        $child->slug = $slug;
+                        $childSlug = $child->generateSlug();
+                        $child->slug = $childSlug;
                         $child->save();
                     }
                 }

@@ -90,6 +90,7 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
     <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/front.js') }}"></script>
 
     @yield('after_scripts')
     
