@@ -62,54 +62,22 @@ class RedirectCrudController extends CrudController {
     }
 
 
-	public function store(StoreRequest $request)
-	{
-		$this->crud->hasAccessOrFail('create');
+    public function store(StoreRequest $request)
+    {
+        // your additional operations before save here
+        $redirect_location = parent::storeCrud();
+        // your additional operations after save here
+        // use $this->data['entry'] or $this->crud->entry
+        return $redirect_location;
+    }
 
-        // insert item in the db
-        $item = $this->crud->create(\Request::except(['save_action']));
-
-        // show a success message
-        \Alert::success(trans('backpack::crud.insert_success'))->flash();
-
-        // redirect the user where he chose to be redirected
-        switch (\Request::input('save_action')) {
-            case 'save_and_edit':
-                return \Redirect::to($this->crud->route.'/'.$item->id.'/edit');
-            case 'save_and_new' :
-                return \Redirect::to($this->crud->route.'/create');
-            default:
-                return \Redirect::to($this->crud->route);
-        }
-
-		//return parent::storeCrud();
-	}
-
-	public function update(UpdateRequest $request)
-	{
-		//encrypt password and set it to request
-        $this->crud->hasAccessOrFail('update');
-
-        $dataToUpdate = \Request::except(['save_action']);
-
-        
-        // update the row in the db
-        $this->crud->update(\Request::get('id'), $dataToUpdate);
-
-        // show a success message
-        \Alert::success(trans('backpack::crud.update_success'))->flash();
-
-        // redirect the user where he chose to be redirected
-        switch (\Request::input('save_action')) {
-            case 'save_and_edit':
-                return \Redirect::to($this->crud->route.'/'.\Request::get('id').'/edit');
-            case 'save_and_new' :
-                return \Redirect::to($this->crud->route.'/create');
-            default:
-                return \Redirect::to($this->crud->route);
-        }
-        
-		//return parent::updateCrud();
-	}
+    public function update(UpdateRequest $request)
+    {
+        // your additional operations before save here
+        $redirect_location = parent::updateCrud();
+        // your additional operations after save here
+        // use $this->data['entry'] or $this->crud->entry
+        return $redirect_location;
+    }
 
  }
