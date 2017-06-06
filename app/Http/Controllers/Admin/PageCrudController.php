@@ -26,6 +26,14 @@ class PageCrudController extends CrudController {
             $this->crud->addClause('where', 'is_live', $value);
         });
 
+        $this->crud->addFilter([
+            'name' => 'title',
+            'type' => 'text',
+            'label'=> 'Title'
+        ], null, function ($value) {
+            $this->crud->addClause('where', 'title', 'LIKE', "%$value%");
+        });
+
         $this->crud->setColumns([
         	[
 	            'name' => 'name',
