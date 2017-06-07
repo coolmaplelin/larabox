@@ -19,7 +19,7 @@
 
 			<!-- Default box -->
 			@if ($crud->hasAccess('list'))
-				<a href="{{ url($crud->route) }}?form_id={{ $entry->id }}"><i class="fa fa-angle-double-left"></i> {{ trans('backpack::crud.back_to_all') }} <span class="text-lowercase">{{ trans($entry->custom_form->name) }} form entries</span></a><br><br>
+				<a href="{{ url($crud->route) }}?form_id={{ $entry->custom_form->id }}"><i class="fa fa-angle-double-left"></i> {{ trans('backpack::crud.back_to_all') }} <span class="text-lowercase">{{ trans($entry->custom_form->name) }} form entries</span></a><br><br>
 			@endif
 
 			<div class="box">
