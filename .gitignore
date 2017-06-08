@@ -10,3 +10,4 @@ Homestead.json
 Homestead.yaml
 .env
 /public/css/.sass-cache
+composer.lock
